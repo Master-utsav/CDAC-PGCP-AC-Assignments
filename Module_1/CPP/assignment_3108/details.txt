@@ -1,0 +1,25 @@
+create following classes using Inheritance 
+and test whether you can create objects of all classes, 
+and also check whether you can call functions of the classes
+
+Design a system for XYZ Bank for storing account details, 
+Every account will have type either saving account or current account or demat account
+For every account interest rate and minimum balance need to be stored.
+Interest rate for saving account is 4% and for current account 1%
+Minimum balance for saving account will be 20000 and current account will be 1000
+For each account store account holder details(fname, lname, mobile, email, pin) 
+
+If it’s a saving account, then store chequebooknumber
+If current account then store number of transactions/day, number of transactions will be different for every account based on average annual balance in the account and will keep on changing based on how customer maintains the balance in the account.
+
+For demat account store share details, for every share store name, number of shares buying price, date of purchase, selling price, date of selling.
+
+Write a menu driven program
+ 1. Add new account
+ 2. Display account balance by id
+ 3. Close account
+ 4. count a type of account. -----> ask user whether count of saving or current account or demat account to display and display aprropriate count 
+5. Withdraw amount.  ---> allow to withdraw amount only if entered pin is correct and balance is not reduced below minimum balance
+6. Deposite amount
+7. Change pin
+0. Exit
