@@ -6,7 +6,7 @@ Design a system for XYZ Bank for storing account details,
 Every account will have type either saving account or current account or demat account
 For every account interest rate and minimum balance need to be stored.
 Interest rate for saving account is 4% and for current account 1%
-Minimum balance for saving account will be 20000 and current account will be 1000
+Minimum balance for saving account will be 2000 and current account will be 1000
 For each account store account holder details(fname, lname, mobile, email, pin) 
 
 If it’s a saving account, then store chequebooknumber

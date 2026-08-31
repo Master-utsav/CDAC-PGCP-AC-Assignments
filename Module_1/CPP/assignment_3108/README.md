@@ -18,20 +18,24 @@ assignment_3108/
 │   ├── current_acc.h
 │   ├── demat_acc.h
 │   └── saving_acc.h
+|   └── shares.h
 │
 ├── src/
 │   ├── accounts/
 │   │   ├── current_acc.cpp
 │   │   ├── demat_acc.cpp
 │   │   └── saving_acc.cpp
-│   │
-│   ├── bank/
-│   │   └── bank.cpp
-│   │
+│   │   
 │   ├── services/
 │   │   └── bank_arr_service.cpp
-│   │
+│   │ 
+|   |── helper
+|   |   └── helper.cpp
+|   |
+|   |
 │   └── main.cpp
+|   └── bank.cpp
+|   └── shares.cpp
 │
 ├── details.txt
 └── README.md
@@ -41,7 +45,7 @@ assignment_3108/
 Run the following commands in the current folder/terminal:
 
 ```bash
-g++ src/*.cpp src/accounts/*.cpp src/bank/*.cpp src/services/*.cpp -Iinclude -o ./build/main.out
+g++ src/*.cpp src/accounts/*.cpp src/services/*.cpp src/helper/*.cpp -Iinclude -o ./build/main.out
 ```
 
 Then execute the program:
