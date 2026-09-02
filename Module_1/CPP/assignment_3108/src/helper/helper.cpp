@@ -62,7 +62,6 @@ int calculatetrxnPerDayLimit(double averageAnnualBalance) {
 }
 
 
-
 int createChequeBookNumber(int count){
     int branchLocationCode = 21000;
     return branchLocationCode + count;
