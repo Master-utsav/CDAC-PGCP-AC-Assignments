@@ -1,0 +1,58 @@
+1. Write a C++ program using inheritance, runtime polymorphism and templates to calculate parking charges for different types of vehicles.
+
+Parking Types
+Vehicle Type: Car
+
+Fixed parking charge: Rs. 100 for first 3 hours
+
+Beyond 3 hours: Rs. 30 per hour
+
+No discount available.
+
+Vehicle Type: Truck
+
+Fixed parking charge: Rs. 200 for first 2 hours
+
+Beyond 2 hours: Rs. 50 per hour
+
+Discount available: Code TRUCK50 gives Rs. 50 off
+
+Program Requirements
+
+Use abstract base class Vehicle with a pure virtual function calculateCharge().
+
+Create derived classes Car and Truck.
+
+Use runtime polymorphism to handle both vehicle types dynamically.
+
+Implement a static data member to count how many parking receipts are generated.
+
+Use a function template to validate the discount code.
+
+Use an inline function to compute extra parking charges.
+
+Input Validation
+
+Parking hours must be positive.
+
+If vehicle type is invalid, prompt again.
+
+Sample Input / Output
+Sample Input 1
+Enter type of Vehicle (C for Car, T for Truck): C
+Enter parking hours: 5
+Expected Output
+Vehicle type = Car
+Extra charge = Rs. 60
+Total Parking Charge = Rs. 160
+Receipts generated so far: 1
+
+Sample Input 2
+Enter type of Vehicle (C for Car, T for Truck): T
+Enter parking hours: 5
+Enter discount code if available (or press Enter to skip): TRUCK50
+Expected Output
+Vehicle type = Truck
+Extra charge = Rs. 150
+Total Charge after discount = Rs. 300
+Receipts generated so far: 2
