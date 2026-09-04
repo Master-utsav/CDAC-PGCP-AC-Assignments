@@ -1,0 +1,54 @@
+2. Write a C++ program for a Vehicle Registration System using inheritance, runtime polymorphism, templates, and file handling.
+
+1) Abstract Base Class: Vehicle
+
+Properties: RegistrationNumber, ModelName, Manufacturer, Year.
+
+Pure virtual function: displayInfo().
+
+Validation: Year should be between 2000 and the current year.
+
+2) Derived Classes
+Car
+
+Adds property: FuelType
+
+Bike
+
+Adds property: EngineCapacity
+
+3) Other Requirements
+
+Use runtime polymorphism (Vehicle* or smart pointers) to manage both Car and Bike objects.
+
+Use a template function to validate the input year.
+
+Use a static data member in Vehicle to count how many vehicle records are created.
+
+Use an inline function to format and return the vehicle display string.
+
+Store vehicle objects into a binary file, then read them back and display the records.
+
+Implement exception handling for invalid inputs (e.g., empty registration number, invalid year).
+
+Sample Input
+Enter number of vehicles: 2
+
+Enter type of vehicle (C for Car, B for Bike): C
+Enter Registration Number: MH20AB1234
+Enter Model Name: Swift
+Enter Manufacturer: Maruti
+Enter Year: 2018
+Enter Fuel Type: Petrol
+
+Enter type of vehicle (C for Car, B for Bike): B
+Enter Registration Number: MH20XY5678
+Enter Model Name: Pulsar
+Enter Manufacturer: Bajaj
+Enter Year: 2020
+Enter Engine Capacity: 150cc
+Expected Output (after reading from file)
+RegNo: MH20AB1234, Model: Swift, Manufacturer: Maruti, Year: 2018, FuelType: Petrol
+RegNo: MH20XY5678, Model: Pulsar, Manufacturer: Bajaj, Year: 2020, EngineCapacity: 150cc
+---------------------------------------------------------------------------------------
+Total Vehicles stored: 2

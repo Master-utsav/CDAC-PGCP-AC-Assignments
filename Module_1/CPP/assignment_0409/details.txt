@@ -1,0 +1,10 @@
+1. Use stack, to check given string is palindrome or not
+2. check the given string is Balanced parenthesis or not (use stack)  {{[]()()[]}}
+{{(()}}
+3. Write a program to save employees in map, id as key and object as a value
+Employee contains id and name
+1. Add a new employee
+2. Delete employee by id
+3. Display all
+4. Display by id
+5. Display by name
