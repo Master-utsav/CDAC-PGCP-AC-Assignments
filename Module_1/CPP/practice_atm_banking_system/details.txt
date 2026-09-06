@@ -1,0 +1,30 @@
+ATM Banking System (state/menu-driven, transaction history, PIN-based exceptions)
+
+This one has a different flavor from the others: it's naturally loop/menu-driven (like a real ATM session) rather than a "collect N records upfront and dump them" shape — good practice if tomorrow's question expects an interactive flow instead of a fixed input batch.
+
+Abstract Base Class: BankAccount
+
+Properties: AccountNumber, HolderName, PIN (store as int or string), Balance, OpenedYear
+Pure virtual: withdraw(double amount) — different account types enforce different withdrawal rules
+Pure virtual: getAccountType() returning a string ("Savings"/"Current")
+Validation: OpenedYear between 2000 and current year; Balance can't be negative at creation
+
+Derived Classes:
+
+SavingsAccount — adds MinimumBalance (e.g. 1000); withdraw() must reject if balance would drop below minimum
+CurrentAccount — adds OverdraftLimit; withdraw() is allowed to take balance negative, but not past -OverdraftLimit
+
+Core ATM mechanics (this is the real point of the question):
+
+A class ATM that holds a collection of accounts (vector<unique_ptr<BankAccount>> or similar) and runs a menu loop: Login (enter account number + PIN) → Check Balance / Deposit / Withdraw / Print Mini Statement / Exit
+PIN check: allow max 3 attempts, then lock the session (throw/catch a custom AuthenticationException)
+Every successful deposit/withdrawal appends an entry to that account's own transaction history (vector<string>, each entry like "Withdraw: 500 | Balance: 4500") — "Print Mini Statement" shows the last 5 transactions
+Use runtime polymorphism: the ATM's withdraw flow calls account->withdraw(amount) without knowing/caring if it's Savings or Current — the different rejection rules must come from the override, not an if/else in the ATM class
+
+Other requirements:
+
+Static member in BankAccount tracking total accounts created across the whole bank
+Inline function to format a transaction line for the statement
+Template function to validate OpenedYear
+Exception handling: wrong PIN (with attempt counter), insufficient funds / overdraft exceeded, invalid deposit amount (negative or zero)
+Optional file handling extension if you have time left: persist accounts (balance + basic info) to a binary file on exit, and reload on startup so balances survive between runs

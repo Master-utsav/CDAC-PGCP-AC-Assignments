@@ -1,0 +1,25 @@
+Movie Ticket Booking System (binary file update/delete — the twist)
+
+Abstract Base Class: Ticket
+
+Properties: BookingID, MovieName, ShowYear
+Pure virtual: getPrice() returning double
+Validation: ShowYear between 2015 and current year
+
+Derived Classes:
+
+RegularTicket — adds SeatNumber
+PremiumTicket — adds SeatNumber and HasRecliner (bool), price includes a recliner surcharge
+
+File handling — this is the core twist, don't skip it:
+
+Store all bookings to a binary file as fixed-size records (this constrains your class design — no std::string/vector members that vary in size if you're writing raw structs; either use fixed-size char arrays for strings, or write a serialization scheme that records lengths)
+Implement a function bool cancelBooking(string bookingID) that finds the matching record in the file and either marks it deleted (e.g., a bool isCancelled flag rewritten in place using fstream seek + overwrite) or removes it by rewriting the file without that record — pick one approach and be able to justify it
+Implement bool updateSeat(string bookingID, string newSeat) that locates a record by ID and updates just that field in place, without rewriting the whole file (tests seekp/seekg and in-place binary writes specifically)
+After update/cancel operations, read and display all remaining active bookings
+
+Other requirements:
+
+Static member tracking total bookings ever created (even cancelled ones stay counted historically)
+Template function to validate ShowYear
+Exception handling: booking ID not found (custom exception), invalid year, empty movie name

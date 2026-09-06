@@ -1,0 +1,25 @@
+Inventory System with Custom Iterator (heavy on RTTI + iterators + const-correctness)
+
+Base class: Product
+
+Properties: SKU, Name, Price
+Virtual applyDiscount(double percent)
+Virtual destructor
+
+Derived classes: Electronics (adds WarrantyMonths), Grocery (adds ExpiryDate as a string)
+
+Class: Inventory
+
+Internally holds vector<Product*> (or unique_ptr<Product>, your choice)
+Implement basic custom iterator support for Inventory itself: begin()/end() methods returning vector<Product*>::iterator, so a caller can do for (auto& p : myInventory) directly on your Inventory object, not on some exposed internal vector — tests understanding of what begin()/end() actually need to return for range-based for loops to work.
+A const member function getTotalValue() const that sums all product prices — must not modify any state, tests const-correctness
+Use a mutable counter inside Inventory that tracks how many times getTotalValue() has been called, incremented even though the function is const (direct callback to the mutable topic)
+
+RTTI requirement:
+
+Write a function void printElectronicsOnly(Inventory& inv) that iterates all products and uses dynamic_cast<Electronics*> to filter and print only the electronics items — tests RTTI + downcasting in a realistic filtering scenario, not just an isolated demo
+
+Other requirements:
+
+Exception handling for invalid price (negative) at construction time
+No binary file handling — the constraint here is purely OOP mechanics + STL iterator protocol + RTTI, so you're not splitting time with I/O

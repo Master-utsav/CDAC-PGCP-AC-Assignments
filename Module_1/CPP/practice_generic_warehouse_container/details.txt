@@ -1,0 +1,28 @@
+Generic Warehouse Container (templates + operator overloading combined, no inheritance)
+
+This one deliberately drops inheritance/polymorphism so you practice templates and operators without leaning on OOP hierarchy as a crutch — a good gap-check since most practice questions (including your sample) blend everything together.
+
+Class template: WarehouseBox<T>
+
+Holds a T item and an int quantity
+Constructor validates quantity > 0 (throw exception otherwise)
+Overload + — combining two WarehouseBox<T> of the same T item adds quantities (throw an exception if the items don't match, e.g. compare via ==, which means T needs operator== — mention/handle that assumption)
+Overload < — compares boxes by quantity (needed for sorting)
+Overload << — friend function, prints the box contents
+Overload prefix ++ and postfix ++ — increment quantity by 1
+
+Class template: Warehouse<T>
+
+Internally holds vector<WarehouseBox<T>>
+Template member function void addBox(WarehouseBox<T> box)
+Template member function WarehouseBox<T> findLargest() — uses operator< you defined, via std::max_element with a lambda, or manual loop
+void sortByQuantity() — uses std::sort, relying on your operator<
+
+Concrete usage in main():
+
+Instantiate Warehouse<string> (boxes of string-named items) and demonstrate: adding several boxes, combining two matching boxes with +, sorting, printing the largest, incrementing a box's quantity with ++
+
+Other requirements:
+
+Exception handling throughout (mismatched item combine, zero/negative quantity, empty warehouse when calling findLargest())
+No file handling, no inheritance — the point is proving you can handle templates + operator overloading + STL algorithms cleanly when they're not scaffolded by an inheritance hierarchy, since that's a different mental muscle than the "abstract base + 2 derived" shape you've now seen five times.
