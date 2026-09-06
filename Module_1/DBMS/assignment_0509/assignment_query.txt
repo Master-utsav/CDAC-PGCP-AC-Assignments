@@ -1,0 +1,1295 @@
+======================
+
+SHOW DATABASES;
+
+======================
+
+CREATE DATABASE batch2;
+
+======================
+
+USE batch2;
+
+======================
+
+CREATE TABLE vehicle_table
+(
+	vid INT,
+	vname VARCHAR(20),
+	price INT,
+	discount INT,
+	milage INT,
+        category VARCHAR(20),
+	details VARCHAR(100)
+);
+
+========================
+
+DESCRIBE vehicle_table;
+
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| vid      | int          | YES  |     | NULL    |       |
+| vname    | varchar(20)  | YES  |     | NULL    |       |
+| price    | int          | YES  |     | NULL    |       |
+| discount | int          | YES  |     | NULL    |       |
+| milage   | int          | YES  |     | NULL    |       |
+| category | varchar(20)  | YES  |     | NULL    |       |
+| details  | varchar(100) | YES  |     | NULL    |       |
++----------+--------------+------+-----+---------+-------+
+
+=======================
+
+INSERT INTO vehicle_table
+VALUES (1,'Active',80000,10,35,'Bike','Two-wheeler. Sturdy. Milage 30 km');
+
+Query OK, 1 row affected (0.00 sec)
+
+=======================
+
+INSERT INTO vehicle_table
+VALUES  (2,'Santro',95000,20,20,'Car','Product of Hyandai.'),
+        (3,'Yamaha',160000,5,70,'Bike','Sturdy and good milage'),
+        (4,'i-10',300000,8,18,'Car','Good small car'),
+        (5,'Wager-R',250000,10,25,'Car','Good milage car'),
+        (6,'Hero Splendour',75000,9,65,'Bike','Best bike'),
+        (7,'Royal Enfild',190000,5,40,'Bike','a royal bike');
+
+Query OK, 6 rows affected (0.01 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+=========================
+
+SELECT *
+FROM vehicle_table;
++------+----------------+--------+----------+--------+----------+-----------------------------------+
+| vid  | vname          | price  | discount | milage | category | details                           |
++------+----------------+--------+----------+--------+----------+-----------------------------------+
+|    1 | Active         |  80000 |       10 |     35 | Bike     | Two-wheeler. Sturdy. Milage 30 km |
+|    1 | Active         |  80000 |       10 |     35 | Bike     | Two-wheeler. Sturdy. Milage 30 km |
+|    2 | Santro         |  95000 |       20 |     20 | Car      | Product of Hyandai.               |
+|    3 | Yamaha         | 160000 |        5 |     70 | Bike     | Sturdy and good milage            |
+|    4 | i-10           | 300000 |        8 |     18 | Car      | Good small car                    |
+|    5 | Wager-R        | 250000 |       10 |     25 | Car      | Good milage car                   |
+|    6 | Hero Splendour |  75000 |        9 |     65 | Bike     | Best bike                         |
+|    7 | Royal Enfild   | 190000 |        5 |     40 | Bike     | a royal bike                      |
++------+----------------+--------+----------+--------+----------+-----------------------------------+
+8 rows in set (0.00 sec)
+
+=========================
+
+CREATE TABLE customer_table
+(
+	custid INT,
+	cname VARCHAR(50),
+	location VARCHAR(50)
+);
+
+=========================
+
+DESCRIBE customer_table;
++----------+-------------+------+-----+---------+-------+
+| Field    | Type        | Null | Key | Default | Extra |
++----------+-------------+------+-----+---------+-------+
+| custid   | int         | YES  |     | NULL    |       |
+| cname    | varchar(50) | YES  |     | NULL    |       |
+| location | varchar(50) | YES  |     | NULL    |       |
++----------+-------------+------+-----+---------+-------+
+3 rows in set (0.00 sec)
+
+=========================
+
+INSERT INTO customer_table
+VALUES  (1, 'Nilima', 'Pimpri'),
+        (2, 'Ganesh', 'Pune'),
+        (3, 'Kishor', 'Kothrud'),
+        (4, 'Priya', 'Aundh');
+
+Query OK, 4 rows affected (0.01 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+=========================
+
+SELECT *
+FROM customer_table;
++--------+--------+----------+
+| custid | cname  | location |
++--------+--------+----------+
+|      1 | Nilima | Pimpri   |
+|      2 | Ganesh | Pune     |
+|      3 | Kishor | Kothrud  |
+|      4 | Priya  | Aundh    |
++--------+--------+----------+
+4 rows in set (0.00 sec)
+
+=========================
+
+CREATE TABLE salesman_table
+(
+	sid INT,
+	sname VARCHAR(50),
+	city VARCHAR(50),
+        experience INT
+);
+
+Query OK, 0 rows affected (0.04 sec)
+
+=========================
+
+INSERT INTO salesman_table
+VALUES  (10, 'Rajesh', 'Mumbai', 5),
+        (11, 'Seema', 'Pune', 8),
+        (12, 'Shailesh', 'Nagpur', 7),
+        (13, 'Rakhi', 'Pune', 2);
+
+Query OK, 4 rows affected (0.01 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+=========================
+
+SELECT *
+FROM salesman_table;
++------+----------+--------+------------+
+| sid  | sname    | city   | experience |
++------+----------+--------+------------+
+|   10 | Rajesh   | Mumbai |          5 |
+|   11 | Seema    | Pune   |          8 |
+|   12 | Shailesh | Nagpur |          7 |
+|   13 | Rakhi    | Pune   |          2 |
++------+----------+--------+------------+
+4 rows in set (0.00 sec)
+
+=========================
+
+1. Display vid, vname, price and details from table vehicle with column heading as Vehicle id, vehicle name, price, discount and details. 
+
+--------------QUERY---------------
+
+SELECT vid "Vehicle id", vname "Vehicle name", price, discount, details
+FROM vehicle_table;
+
+--------------QUERY---------------
+
++------------+----------------+--------+----------+-----------------------------------+
+| Vehicle id | Vehicle name   | price  | discount | details                           |
++------------+----------------+--------+----------+-----------------------------------+
+|          1 | Active         |  80000 |       10 | Two-wheeler. Sturdy. Milage 30 km |
+|          1 | Active         |  80000 |       10 | Two-wheeler. Sturdy. Milage 30 km |
+|          2 | Santro         |  95000 |       20 | Product of Hyandai.               |
+|          3 | Yamaha         | 160000 |        5 | Sturdy and good milage            |
+|          4 | i-10           | 300000 |        8 | Good small car                    |
+|          5 | Wager-R        | 250000 |       10 | Good milage car                   |
+|          6 | Hero Splendour |  75000 |        9 | Best bike                         |
+|          7 | Royal Enfild   | 190000 |        5 | a royal bike                      |
++------------+----------------+--------+----------+-----------------------------------+
+8 rows in set (0.00 sec)
+
+=========================
+
+2. List all salesman working in Pune and having experience >5 years.
+
+--------------QUERY---------------
+
+SELECT * 
+FROM salesman_table
+WHERE experience > 5;
+
+--------------QUERY---------------
+
++------+----------+--------+------------+
+| sid  | sname    | city   | experience |
++------+----------+--------+------------+
+|   11 | Seema    | Pune   |          8 |
+|   12 | Shailesh | Nagpur |          7 |
++------+----------+--------+------------+
+2 rows in set (0.00 sec)
+
+=========================
+
+3. Add some new customers
+  'Geeta' with custid 5 and area as 'Pimpri'.
+  'Raj' with custid 6 and area 'Aundh'
+  'Yash' with custid 7 and area 'Aundh
+
+--------------QUERY---------------
+
+INSERT INTO customer_table
+VALUES (5, 'Geeta' , 'Pimpri'),
+	(6, 'Raj' , 'Aundh'),
+	(7, 'Yash' , 'Aundh');
+
+--------------QUERY---------------
+
+SELECT * FROM customer_table;
++--------+--------+----------+
+| custid | cname  | location |
++--------+--------+----------+
+|      1 | Nilima | Pimpri   |
+|      2 | Ganesh | Pune     |
+|      3 | Kishor | Kothrud  |
+|      4 | Priya  | Aundh    |
+|      5 | Geeta  | Pimpri   |
+|      6 | Raj    | Aundh    |
+|      7 | Yash   | Aundh    |
++--------+--------+----------+
+7 rows in set (0.00 sec)
+
+=========================
+
+4. Display information of vehicle, Royal Enfild.
+
+--------------QUERY---------------
+
+SELECT * 
+FROM vehicle_table
+WHERE vname='Royal Enfild';
+
+--------------QUERY---------------
+
++------+--------------+--------+----------+--------+----------+--------------+
+| vid  | vname        | price  | discount | milage | category | details      |
++------+--------------+--------+----------+--------+----------+--------------+
+|    7 | Royal Enfild | 190000 |        5 |     40 | Bike     | a royal bike |
++------+--------------+--------+----------+--------+----------+--------------+
+1 row in set (0.00 sec)
+
+=========================
+
+5. Display information of all Bikes.
+
+--------------QUERY---------------
+
+SELECT * 
+FROM vehicle_table
+WHERE category='Bike';
+
+--------------QUERY---------------
++------+----------------+--------+----------+--------+----------+-----------------------------------+
+| vid  | vname          | price  | discount | milage | category | details                           |
++------+----------------+--------+----------+--------+----------+-----------------------------------+
+|    1 | Active         |  80000 |       10 |     35 | Bike     | Two-wheeler. Sturdy. Milage 30 km |
+|    1 | Active         |  80000 |       10 |     35 | Bike     | Two-wheeler. Sturdy. Milage 30 km |
+|    3 | Yamaha         | 160000 |        5 |     70 | Bike     | Sturdy and good milage            |
+|    6 | Hero Splendour |  75000 |        9 |     65 | Bike     | Best bike                         |
+|    7 | Royal Enfild   | 190000 |        5 |     40 | Bike     | a royal bike                      |
++------+----------------+--------+----------+--------+----------+-----------------------------------+
+5 rows in set (0.00 sec)
+
+=========================
+
+6. Display vid, vname, price, details and total price for each vehicle.
+
+--------------QUERY---------------
+
+SELECT vid, vname, price, details, price-(price*(discount/100)) "total price"
+FROM vehicle_table;
+
+--------------QUERY---------------
+
++------+----------------+--------+-----------------------------------+-------------+
+| vid  | vname          | price  | details                           | total price |
++------+----------------+--------+-----------------------------------+-------------+
+|    1 | Active         |  80000 | Two-wheeler. Sturdy. Milage 30 km |  72000.0000 |
+|    1 | Active         |  80000 | Two-wheeler. Sturdy. Milage 30 km |  72000.0000 |
+|    2 | Santro         |  95000 | Product of Hyandai.               |  76000.0000 |
+|    3 | Yamaha         | 160000 | Sturdy and good milage            | 152000.0000 |
+|    4 | i-10           | 300000 | Good small car                    | 276000.0000 |
+|    5 | Wager-R        | 250000 | Good milage car                   | 225000.0000 |
+|    6 | Hero Splendour |  75000 | Best bike                         |  68250.0000 |
+|    7 | Royal Enfild   | 190000 | a royal bike                      | 180500.0000 |
++------+----------------+--------+-----------------------------------+-------------+
+8 rows in set (0.00 sec)
+
+=========================
+
+7. Display information of vehicle i-10.
+
+--------------QUERY---------------
+
+SELECT * 
+FROM vehicle_table
+WHERE vname='i-10';
+
+--------------QUERY---------------
+
++------+-------+--------+----------+--------+----------+----------------+
+| vid  | vname | price  | discount | milage | category | details        |
++------+-------+--------+----------+--------+----------+----------------+
+|    4 | i-10  | 300000 |        8 |     18 | Car      | Good small car |
++------+-------+--------+----------+--------+----------+----------------+
+1 row in set (0.00 sec)
+
+=========================
+
+8. Display all vehicles whose price is less than 100000.
+
+--------------QUERY---------------
+
+SELECT * 
+FROM vehicle_table
+WHERE price < 100000;
+
+--------------QUERY---------------
+
++------+----------------+-------+----------+--------+----------+-----------------------------------+
+| vid  | vname          | price | discount | milage | category | details                           |
++------+----------------+-------+----------+--------+----------+-----------------------------------+
+|    1 | Active         | 80000 |       10 |     35 | Bike     | Two-wheeler. Sturdy. Milage 30 km |
+|    1 | Active         | 80000 |       10 |     35 | Bike     | Two-wheeler. Sturdy. Milage 30 km |
+|    2 | Santro         | 95000 |       20 |     20 | Car      | Product of Hyandai.               |
+|    6 | Hero Splendour | 75000 |        9 |     65 | Bike     | Best bike                         |
++------+----------------+-------+----------+--------+----------+-----------------------------------+
+4 rows in set (0.00 sec)
+
+=========================
+
+9. Display all the information of salesmen having experience more than 5 years.
+
+--------------QUERY---------------
+
+SELECT * 
+FROM salesman_table
+WHERE experience > 5;
+
+--------------QUERY---------------
+
++------+----------+--------+------------+
+| sid  | sname    | city   | experience |
++------+----------+--------+------------+
+|   11 | Seema    | Pune   |          8 |
+|   12 | Shailesh | Nagpur |          7 |
++------+----------+--------+------------+
+2 rows in set (0.00 sec)
+
+
+=========================
+
+10. Create a copy of table customer and salesman by name customer1 and salesman1.
+
+--------------QUERY---------------
+
+CREATE TABLE customer1
+AS 
+(
+	SELECT * FROM customer_table
+);
+
+CREATE TABLE salesman1
+AS 
+(
+	SELECT * FROM salesman_table
+);
+
+--------------QUERY---------------
+SHOW TABLES;
+
++------------------+
+| Tables_in_batch2 |
++------------------+
+| customer1        |
+| customer_table   |
+| salesman1        |
+| salesman_table   |
+| vehicle_table    |
++------------------+
+5 rows in set (0.00 sec)
+
+=========================
+
+11. Delete customer from area Aundh whose name is Priya.
+
+
+--------------QUERY---------------
+
+DELETE 
+FROM customer1
+WHERE cname='priya' AND location='Aundh';
+
+--------------QUERY---------------
+Query OK, 1 row affected (0.01 sec)
+
+SELECT * from customer1;
++--------+--------+----------+
+| custid | cname  | location |
++--------+--------+----------+
+|      1 | Nilima | Pimpri   |
+|      2 | Ganesh | Pune     |
+|      3 | Kishor | Kothrud  |
+|      5 | Geeta  | Pimpri   |
+|      6 | Raj    | Aundh    |
+|      7 | Yash   | Aundh    |
++--------+--------+----------+
+6 rows in set (0.00 sec)
+
+=========================
+
+12. Delete customer from Pimpri area.
+
+--------------QUERY---------------
+
+DELETE 
+FROM customer1
+WHERE location='Pimpri';
+
+--------------QUERY---------------
+Query OK, 2 rows affected (0.01 sec)
+
+SELECT * from customer1;
++--------+--------+----------+
+| custid | cname  | location |
++--------+--------+----------+
+|      2 | Ganesh | Pune     |
+|      3 | Kishor | Kothrud  |
+|      6 | Raj    | Aundh    |
+|      7 | Yash   | Aundh    |
++--------+--------+----------+
+4 rows in set (0.00 sec)
+
+=========================
+
+12. Delete entire table Salesman1
+
+--------------QUERY---------------
+
+DROP TABLE salesman1;
+
+--------------QUERY---------------
+
+Query OK, 0 rows affected (0.04 sec)
+
+SHOW TABLES;
++------------------+
+| Tables_in_batch2 |
++------------------+
+| customer1        |
+| customer_table   |
+| salesman_table   |
+| vehicle_table    |
++------------------+
+4 rows in set (0.00 sec)
+
+=========================
+
+14. Meera(Seema) leaves the company. Make necessary changes in table.
+
+--------------QUERY---------------
+
+DELETE
+FROM salesman_table
+WHERE sname='seema';
+
+--------------QUERY---------------
++------+----------+--------+------------+
+| sid  | sname    | city   | experience |
++------+----------+--------+------------+
+|   10 | Rajesh   | Mumbai |          5 |
+|   12 | Shailesh | Nagpur |          7 |
+|   13 | Rakhi    | Pune   |          2 |
++------+----------+--------+------------+
+3 rows in set (0.00 sec)
+
+=========================
+
+15. For the given schema, create the table and solve following queries
+employee(eno, ename, basic, incentives)  
+
+CREATE TABLE employee
+(
+	eno INT,
+	ename VARCHAR(50),
+	basic INT,
+	incentive INT
+);
+
+INSERT INTO employee
+VALUES 
+(1, 'Rajesh', 20000, 1500),
+(2, 'Sarita', 25000, 1000),
+(3, 'Meera', 15000, 3000),
+(4, 'Jitesh', 30000, 500),
+(5, 'Ramesh', 12000, 3000);
+
+SELECT * FROM employee;
+
++------+--------+-------+-----------+
+| eno  | ename  | basic | incentive |
++------+--------+-------+-----------+
+|    1 | Rajesh | 20000 |      1500 |
+|    2 | Sarita | 25000 |      1000 |
+|    3 | Meera  | 15000 |      3000 |
+|    4 | Jitesh | 30000 |       500 |
+|    5 | Ramesh | 12000 |      3000 |
++------+--------+-------+-----------+
+5 rows in set (0.00 sec)
+
+===========================================
+
+1) Write a query to change basic salary of Rajesh to 25000 and incentives to 18000.
+
+--------------QUERY---------------
+
+UPDATE employee 
+SET basic=25000, incentive=18000
+WHERE ename='Rajesh';
+
+--------------QUERY---------------
+
+SELECT * FROM employee;
++------+--------+-------+-----------+
+| eno  | ename  | basic | incentive |
++------+--------+-------+-----------+
+|    1 | Rajesh | 25000 |     18000 |
+|    2 | Sarita | 25000 |      1000 |
+|    3 | Meera  | 15000 |      3000 |
+|    4 | Jitesh | 30000 |       500 |
+|    5 | Ramesh | 12000 |      3000 |
++------+--------+-------+-----------+
+5 rows in set (0.00 sec)
+
+==========================================
+
+2) Ramesh is promoted as Head Clerk and now earns salary 60000. Write a query.
+
+--------------QUERY---------------
+
+UPDATE employee 
+SET basic=60000
+WHERE ename='Ramesh';
+
+--------------QUERY---------------
+
+SELECT * FROM employee;
++------+--------+-------+-----------+
+| eno  | ename  | basic | incentive |
++------+--------+-------+-----------+
+|    1 | Rajesh | 25000 |     18000 |
+|    2 | Sarita | 25000 |      1000 |
+|    3 | Meera  | 15000 |      3000 |
+|    4 | Jitesh | 30000 |       500 |
+|    5 | Ramesh | 60000 |      3000 |
++------+--------+-------+-----------+
+5 rows in set (0.00 sec)
+
+============================================================
+
+3) Change incentive of Jitesh to 1000.
+
+--------------QUERY---------------
+
+UPDATE employee 
+SET incentive=1000
+WHERE ename='Jitesh';
+
+--------------QUERY---------------
+
+SELECT * FROM employee;
++------+--------+-------+-----------+
+| eno  | ename  | basic | incentive |
++------+--------+-------+-----------+
+|    1 | Rajesh | 25000 |     18000 |
+|    2 | Sarita | 25000 |      1000 |
+|    3 | Meera  | 15000 |      3000 |
+|    4 | Jitesh | 30000 |      1000 |
+|    5 | Ramesh | 60000 |      3000 |
++------+--------+-------+-----------+
+5 rows in set (0.00 sec)
+
+===================================================
+===================================================
+
+Note : Use Demobld.sql database shared in the assignment folder
+Use Emp, Dept and Salgrade  tables to solve following queries.  
+
+==========================================
+
+1. List all records with sal > 2000 and comm>200
+
+--------------QUERY---------------
+
+SELECT * 
+FROM emp
+WHERE sal>2000 and comm>200;
+
+--------------QUERY---------------
+
+Empty set (0.00 sec)
+
+==========================================
+
+2. List all records where job=’Clerk’ or sal>2000
+
+--------------QUERY---------------
+
+SELECT * 
+FROM emp
+WHERE job='Clerk' or sal>2000;
+
+--------------QUERY---------------
+
++-------+--------+-----------+------+------------+---------+------+--------+
+| EMPNO | ENAME  | JOB       | MGR  | HIREDATE   | SAL     | COMM | DEPTNO |
++-------+--------+-----------+------+------------+---------+------+--------+
+|  7369 | SMITH  | CLERK     | 7902 | 1980-12-17 |  800.00 | NULL |     20 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 2975.00 | NULL |     20 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 2850.00 | NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 | 2450.00 | NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 | 3000.00 | NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000.00 | NULL |     10 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 | 1100.00 | NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 |  950.00 | NULL |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 | 3000.00 | NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300.00 | NULL |     10 |
++-------+--------+-----------+------+------------+---------+------+--------+
+10 rows in set (0.00 sec)
+
+==========================================
+
+3. List all the records with sal=1250 or 1100 
+
+--------------QUERY---------------
+
+SELECT * 
+FROM emp
+WHERE sal=1250 or sal=1100;
+
+--------------QUERY---------------
+
++-------+--------+----------+------+------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB      | MGR  | HIREDATE   | SAL     | COMM    | DEPTNO |
++-------+--------+----------+------+------------+---------+---------+--------+
+|  7521 | WARD   | SALESMAN | 7698 | 1981-02-22 | 1250.00 |  500.00 |     30 |
+|  7654 | MARTIN | SALESMAN | 7698 | 1981-09-28 | 1250.00 | 1400.00 |     30 |
+|  7876 | ADAMS  | CLERK    | 7788 | 1983-01-12 | 1100.00 |    NULL |     20 |
++-------+--------+----------+------+------------+---------+---------+--------+
+3 rows in set (0.00 sec)
+
+==========================================
+
+4. List all employees with sal>1250 and <2850 
+
+--------------QUERY---------------
+
+SELECT * 
+FROM emp
+WHERE sal>1250 and sal<2850;
+
+--------------QUERY---------------
+
++-------+--------+----------+------+------------+---------+--------+--------+
+| EMPNO | ENAME  | JOB      | MGR  | HIREDATE   | SAL     | COMM   | DEPTNO |
++-------+--------+----------+------+------------+---------+--------+--------+
+|  7499 | ALLEN  | SALESMAN | 7698 | 1981-02-20 | 1600.00 | 300.00 |     30 |
+|  7782 | CLARK  | MANAGER  | 7839 | 1981-06-09 | 2450.00 |   NULL |     10 |
+|  7844 | TURNER | SALESMAN | 7698 | 1981-09-08 | 1500.00 |   0.00 |     30 |
+|  7934 | MILLER | CLERK    | 7782 | 1982-01-23 | 1300.00 |   NULL |     10 |
++-------+--------+----------+------+------------+---------+--------+--------+
+4 rows in set (0.00 sec)
+
+==========================================
+
+5. Retrieve the details (Name, Salary and dept no) of the emp who are working in department no 20
+ 
+
+--------------QUERY---------------
+
+SELECT ename, sal, deptno 
+FROM emp
+WHERE deptno=20;
+
+--------------QUERY---------------
+
++-------+---------+--------+
+| ename | sal     | deptno |
++-------+---------+--------+
+| SMITH |  800.00 |     20 |
+| JONES | 2975.00 |     20 |
+| SCOTT | 3000.00 |     20 |
+| ADAMS | 1100.00 |     20 |
+| FORD  | 3000.00 |     20 |
++-------+---------+--------+
+5 rows in set (0.00 sec)
+
+==========================================
+
+6. Display all employees who have joined after 9th june 81.
+ 
+--------------QUERY---------------
+
+SELECT * 
+FROM emp
+WHERE hiredate>'1981-06-09';
+
+--------------QUERY---------------
+
++-------+--------+-----------+------+------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB       | MGR  | HIREDATE   | SAL     | COMM    | DEPTNO |
++-------+--------+-----------+------+------------+---------+---------+--------+
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 | 1250.00 | 1400.00 |     30 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 | 3000.00 |    NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000.00 |    NULL |     10 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 | 1500.00 |    0.00 |     30 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 |  950.00 |    NULL |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 | 3000.00 |    NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300.00 |    NULL |     10 |
++-------+--------+-----------+------+------------+---------+---------+--------+
+8 rows in set (0.00 sec)
+
+==========================================
+
+7. Display empno, empname, sal, comm and total salary
+ 
+--------------QUERY---------------
+
+SELECT empno, ename, sal, comm, sal+IFNULL(comm, 0) 'TOTAL SALARY' 
+FROM emp;
+
+--------------QUERY---------------
+
++-------+--------+---------+---------+--------------+
+| empno | ename  | sal     | comm    | TOTAL SALARY |
++-------+--------+---------+---------+--------------+
+|  7369 | SMITH  |  800.00 |    NULL |       800.00 |
+|  7499 | ALLEN  | 1600.00 |  300.00 |      1900.00 |
+|  7521 | WARD   | 1250.00 |  500.00 |      1750.00 |
+|  7566 | JONES  | 2975.00 |    NULL |      2975.00 |
+|  7654 | MARTIN | 1250.00 | 1400.00 |      2650.00 |
+|  7698 | BLAKE  | 2850.00 |    NULL |      2850.00 |
+|  7782 | CLARK  | 2450.00 |    NULL |      2450.00 |
+|  7788 | SCOTT  | 3000.00 |    NULL |      3000.00 |
+|  7839 | KING   | 5000.00 |    NULL |      5000.00 |
+|  7844 | TURNER | 1500.00 |    0.00 |      1500.00 |
+|  7876 | ADAMS  | 1100.00 |    NULL |      1100.00 |
+|  7900 | JAMES  |  950.00 |    NULL |       950.00 |
+|  7902 | FORD   | 3000.00 |    NULL |      3000.00 |
+|  7934 | MILLER | 1300.00 |    NULL |      1300.00 |
++-------+--------+---------+---------+--------------+
+14 rows in set (0.00 sec)
+
+==========================================
+
+8. Display all jobs from emp table. Display should not give duplicate job names.
+ 
+--------------QUERY---------------
+
+SELECT DISTINCT job 
+FROM emp;
+
+--------------QUERY---------------
+
++-----------+
+| job       |
++-----------+
+| CLERK     |
+| SALESMAN  |
+| MANAGER   |
+| ANALYST   |
+| PRESIDENT |
++-----------+
+5 rows in set (0.00 sec)
+
+==========================================
+
+9. Display all unique  deptnos in which employees are working.
+ 
+--------------QUERY---------------
+
+SELECT DISTINCT deptno 
+FROM emp;
+
+--------------QUERY---------------
+
++--------+
+| deptno |
++--------+
+|     20 |
+|     30 |
+|     10 |
++--------+
+3 rows in set (0.00 sec)
+
+==========================================
+
+10. Implement following using case statement. Use data from emp database.
+    If comm is null ‘need improvement’ If <500 “ok” If >=500 and < 1000 ‘good' ‘Excellent'. 
+ 
+--------------QUERY---------------
+
+SELECT ename, sal, comm,
+CASE
+WHEN comm IS NULL THEN 'Need Improvement'
+WHEN comm < 500 THEN 'OK'
+WHEN comm >= 500 AND comm < 1000 THEN 'Good'
+ELSE 'Excellent'
+END AS "Status"
+FROM emp;
+
+--------------QUERY---------------
+
++--------+---------+---------+------------------+
+| ename  | sal     | comm    | Status           |
++--------+---------+---------+------------------+
+| SMITH  |  800.00 |    NULL | Need Improvement |
+| ALLEN  | 1600.00 |  300.00 | OK               |
+| WARD   | 1250.00 |  500.00 | Good             |
+| JONES  | 2975.00 |    NULL | Need Improvement |
+| MARTIN | 1250.00 | 1400.00 | Excellent        |
+| BLAKE  | 2850.00 |    NULL | Need Improvement |
+| CLARK  | 2450.00 |    NULL | Need Improvement |
+| SCOTT  | 3000.00 |    NULL | Need Improvement |
+| KING   | 5000.00 |    NULL | Need Improvement |
+| TURNER | 1500.00 |    0.00 | OK               |
+| ADAMS  | 1100.00 |    NULL | Need Improvement |
+| JAMES  |  950.00 |    NULL | Need Improvement |
+| FORD   | 3000.00 |    NULL | Need Improvement |
+| MILLER | 1300.00 |    NULL | Need Improvement |
++--------+---------+---------+------------------+
+14 rows in set (0.00 sec)
+
+==========================================
+
+11. List the employees in dept 20 and 30 who did not get any commission.
+ 
+--------------QUERY---------------
+
+SELECT *
+FROM emp
+WHERE deptno=20 OR deptno=30 AND comm IS NOT NULL;
+
+--------------QUERY---------------
+
++-------+--------+----------+------+------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB      | MGR  | HIREDATE   | SAL     | COMM    | DEPTNO |
++-------+--------+----------+------+------------+---------+---------+--------+
+|  7369 | SMITH  | CLERK    | 7902 | 1980-12-17 |  800.00 |    NULL |     20 |
+|  7499 | ALLEN  | SALESMAN | 7698 | 1981-02-20 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN | 7698 | 1981-02-22 | 1250.00 |  500.00 |     30 |
+|  7566 | JONES  | MANAGER  | 7839 | 1981-04-02 | 2975.00 |    NULL |     20 |
+|  7654 | MARTIN | SALESMAN | 7698 | 1981-09-28 | 1250.00 | 1400.00 |     30 |
+|  7788 | SCOTT  | ANALYST  | 7566 | 1982-12-09 | 3000.00 |    NULL |     20 |
+|  7844 | TURNER | SALESMAN | 7698 | 1981-09-08 | 1500.00 |    0.00 |     30 |
+|  7876 | ADAMS  | CLERK    | 7788 | 1983-01-12 | 1100.00 |    NULL |     20 |
+|  7902 | FORD   | ANALYST  | 7566 | 1981-12-03 | 3000.00 |    NULL |     20 |
++-------+--------+----------+------+------------+---------+---------+--------+
+9 rows in set (0.00 sec)
+
+==========================================
+
+12. Display all employees with sal >2000 and job is either clerk or Salesman.
+ 
+--------------QUERY---------------
+
+SELECT *
+FROM emp
+WHERE sal>2000 AND job IN ('clerk', 'salesman');
+
+--------------QUERY---------------
+
+Empty set (0.00 sec)
+
+==========================================
+
+13. Display all employees who works in either dept 10 or 30 and joined in year 1982
+ 
+--------------QUERY---------------
+
+SELECT *
+FROM emp
+WHERE (hiredate >= '1982-01-01' AND hiredate <= '1982-12-31') AND (deptno=10 OR deptno=30);
+
+--------------QUERY---------------
+
++-------+--------+-------+------+------------+---------+------+--------+
+| EMPNO | ENAME  | JOB   | MGR  | HIREDATE   | SAL     | COMM | DEPTNO |
++-------+--------+-------+------+------------+---------+------+--------+
+|  7934 | MILLER | CLERK | 7782 | 1982-01-23 | 1300.00 | NULL |     10 |
++-------+--------+-------+------+------------+---------+------+--------+
+1 row in set (0.00 sec)
+
+==========================================
+
+14. Display the emp details who do not have manager
+ 
+--------------QUERY---------------
+
+SELECT *
+FROM emp
+WHERE mgr IS NULL;
+
+--------------QUERY---------------
+
++-------+-------+-----------+------+------------+---------+------+--------+
+| EMPNO | ENAME | JOB       | MGR  | HIREDATE   | SAL     | COMM | DEPTNO |
++-------+-------+-----------+------+------------+---------+------+--------+
+|  7839 | KING  | PRESIDENT | NULL | 1981-11-17 | 5000.00 | NULL |     10 |
++-------+-------+-----------+------+------------+---------+------+--------+
+1 row in set (0.00 sec)
+
+
+==========================================
+
+15. Display all employees who joined between years 1981 to 1983.
+
+--------------QUERY---------------
+
+SELECT *
+FROM emp
+WHERE hiredate BETWEEN '1981-01-01' AND '1983-12-31';
+
+--------------QUERY---------------
+
++-------+--------+-----------+------+------------+---------+---------+--------+
+| EMPNO | ENAME  | JOB       | MGR  | HIREDATE   | SAL     | COMM    | DEPTNO |
++-------+--------+-----------+------+------------+---------+---------+--------+
+|  7499 | ALLEN  | SALESMAN  | 7698 | 1981-02-20 | 1600.00 |  300.00 |     30 |
+|  7521 | WARD   | SALESMAN  | 7698 | 1981-02-22 | 1250.00 |  500.00 |     30 |
+|  7566 | JONES  | MANAGER   | 7839 | 1981-04-02 | 2975.00 |    NULL |     20 |
+|  7654 | MARTIN | SALESMAN  | 7698 | 1981-09-28 | 1250.00 | 1400.00 |     30 |
+|  7698 | BLAKE  | MANAGER   | 7839 | 1981-05-01 | 2850.00 |    NULL |     30 |
+|  7782 | CLARK  | MANAGER   | 7839 | 1981-06-09 | 2450.00 |    NULL |     10 |
+|  7788 | SCOTT  | ANALYST   | 7566 | 1982-12-09 | 3000.00 |    NULL |     20 |
+|  7839 | KING   | PRESIDENT | NULL | 1981-11-17 | 5000.00 |    NULL |     10 |
+|  7844 | TURNER | SALESMAN  | 7698 | 1981-09-08 | 1500.00 |    0.00 |     30 |
+|  7876 | ADAMS  | CLERK     | 7788 | 1983-01-12 | 1100.00 |    NULL |     20 |
+|  7900 | JAMES  | CLERK     | 7698 | 1981-12-03 |  950.00 |    NULL |     30 |
+|  7902 | FORD   | ANALYST   | 7566 | 1981-12-03 | 3000.00 |    NULL |     20 |
+|  7934 | MILLER | CLERK     | 7782 | 1982-01-23 | 1300.00 |    NULL |     10 |
++-------+--------+-----------+------+------------+---------+---------+--------+
+13 rows in set (0.00 sec)
+
+==========================================
+
+16. Create new table emp10 same as emp without any data. Check it's structure.
+
+--------------QUERY---------------
+
+CREATE TABLE emp10 
+LIKE emp;
+
+--------------QUERY---------------
+
+Query OK, 0 rows affected (0.09 sec)
+
+DESCRIBE emp10;
++----------+--------------+------+-----+---------+-------+
+| Field    | Type         | Null | Key | Default | Extra |
++----------+--------------+------+-----+---------+-------+
+| EMPNO    | int          | NO   |     | NULL    |       |
+| ENAME    | varchar(12)  | YES  |     | NULL    |       |
+| JOB      | varchar(9)   | YES  |     | NULL    |       |
+| MGR      | int          | YES  |     | NULL    |       |
+| HIREDATE | date         | YES  |     | NULL    |       |
+| SAL      | decimal(7,2) | YES  |     | NULL    |       |
+| COMM     | decimal(7,2) | YES  |     | NULL    |       |
+| DEPTNO   | int          | YES  |     | NULL    |       |
++----------+--------------+------+-----+---------+-------+
+8 rows in set (0.01 sec)
+
+SELECT * FROM emp10;
+Empty set (0.00 sec)
+
+==========================================
+
+17. Display the emp details who do not have manager.
+
+--------------QUERY---------------
+
+SELECT * 
+FROM emp
+WHERE mgr IS NULL;
+
+--------------QUERY---------------
+
++-------+-------+-----------+------+------------+---------+------+--------+
+| EMPNO | ENAME | JOB       | MGR  | HIREDATE   | SAL     | COMM | DEPTNO |
++-------+-------+-----------+------+------------+---------+------+--------+
+|  7839 | KING  | PRESIDENT | NULL | 1981-11-17 | 5000.00 | NULL |     10 |
++-------+-------+-----------+------+------------+---------+------+--------+
+1 row in set (0.00 sec)
+
+==========================================
+
+18. List all managers working in dept 10.   
+
+--------------QUERY---------------
+
+SELECT mgr, deptno
+FROM emp
+WHERE deptno=10;
+
+--------------QUERY---------------
+
++------+--------+
+| mgr  | deptno |
++------+--------+
+| 7839 |     10 |
+| NULL |     10 |
+| 7782 |     10 |
++------+--------+
+3 rows in set (0.00 sec)
+
+==========================================
+
+19. Display top three paid employees. List ename, deptno, job, sal.
+
+--------------QUERY---------------
+
+SELECT ename, deptno, job, sal
+FROM emp
+ORDER BY sal DESC
+LIMIT 3;
+
+--------------QUERY---------------
+
++-------+--------+-----------+---------+
+| ename | deptno | job       | sal     |
++-------+--------+-----------+---------+
+| KING  |     10 | PRESIDENT | 5000.00 |
+| FORD  |     20 | ANALYST   | 3000.00 |
+| SCOTT |     20 | ANALYST   | 3000.00 |
++-------+--------+-----------+---------+
+3 rows in set (0.00 sec)
+
+==========================================
+
+20. Retrieve second highest salary from the emp table. List ename, deptno, job, sal.
+
+--------------QUERY---------------
+
+SELECT ename, deptno, job, sal
+FROM emp
+ORDER BY sal DESC
+LIMIT 1,1;
+
+--------------QUERY---------------
+
++-------+--------+---------+---------+
+| ename | deptno | job     | sal     |
++-------+--------+---------+---------+
+| SCOTT |     20 | ANALYST | 3000.00 |
++-------+--------+---------+---------+
+1 row in set (0.00 sec)
+
+====================================================
+BANK ACCOUNT
+===================================================
+
+1. Show all customers
+
+--------------QUERY---------------
+
+SELECT * 
+FROM customer;
+
+--------------QUERY---------------
+
++-------------+----------------+------------+-----------+-----------+
+| customer_id | name           | phone      | address   | branch_id |
++-------------+----------------+------------+-----------+-----------+
+|         101 | Rahul Sharma   | 9876543210 | Pune      |         1 |
+|         102 | Sneha Patil    | 9876501234 | Pune      |         1 |
+|         103 | Amit Verma     | 9876512345 | Mumbai    |         2 |
+|         104 | Priya Singh    | 9876598765 | Delhi     |         3 |
+|         105 | Rohit Kulkarni | 9876588888 | Bangalore |         4 |
++-------------+----------------+------------+-----------+-----------+
+5 rows in set (0.00 sec)
+
+===================================================
+
+2. Show customer account details
+
+--------------QUERY---------------
+
+SELECT * 
+FROM account;
+
+--------------QUERY---------------
+
++------------+-------------+--------------+----------+------------+
+| account_id | customer_id | account_type | balance  | open_date  |
++------------+-------------+--------------+----------+------------+
+|       1001 |         101 | Savings      | 50000.00 | 2023-01-10 |
+|       1002 |         102 | Current      | 75000.00 | 2023-02-15 |
+|       1003 |         103 | Savings      | 62000.00 | 2023-03-20 |
+|       1004 |         104 | Savings      | 45000.00 | 2023-04-12 |
+|       1005 |         105 | Current      | 90000.00 | 2023-05-18 |
++------------+-------------+--------------+----------+------------+
+5 rows in set (0.00 sec)
+
+===================================================
+
+3. Show all accounts with balance > 60000
+
+--------------QUERY---------------
+
+SELECT * 
+FROM account
+WHERE balance > 60000;
+
+--------------QUERY---------------
+
++------------+-------------+--------------+----------+------------+
+| account_id | customer_id | account_type | balance  | open_date  |
++------------+-------------+--------------+----------+------------+
+|       1002 |         102 | Current      | 75000.00 | 2023-02-15 |
+|       1003 |         103 | Savings      | 62000.00 | 2023-03-20 |
+|       1005 |         105 | Current      | 90000.00 | 2023-05-18 |
++------------+-------------+--------------+----------+------------+
+3 rows in set (0.00 sec)
+
+===================================================
+
+4. Show all **branches** available in the bank.
+
+--------------QUERY---------------
+
+SELECT *
+FROM branch;
+
+--------------QUERY---------------
+
++-----------+------------------+-----------+
+| branch_id | branch_name      | city      |
++-----------+------------------+-----------+
+|         1 | Pune Main Branch | Pune      |
+|         2 | Mumbai Central   | Mumbai    |
+|         3 | Delhi Branch     | Delhi     |
+|         4 | Bangalore Branch | Bangalore |
++-----------+------------------+-----------+
+4 rows in set (0.00 sec)
+
+===================================================
+
+5. Display **name and phone number** of customers.
+
+--------------QUERY---------------
+
+SELECT name, phone
+FROM customer;
+
+--------------QUERY---------------
+
++----------------+------------+
+| name           | phone      |
++----------------+------------+
+| Rahul Sharma   | 9876543210 |
+| Sneha Patil    | 9876501234 |
+| Amit Verma     | 9876512345 |
+| Priya Singh    | 9876598765 |
+| Rohit Kulkarni | 9876588888 |
++----------------+------------+
+5 rows in set (0.00 sec)
+
+===================================================
+
+6.Show all **Savings accounts**.
+
+--------------QUERY---------------
+
+SELECT *
+FROM account
+where account_type='Savings';
+
+--------------QUERY---------------
+
++------------+-------------+--------------+----------+------------+
+| account_id | customer_id | account_type | balance  | open_date  |
++------------+-------------+--------------+----------+------------+
+|       1001 |         101 | Savings      | 50000.00 | 2023-01-10 |
+|       1003 |         103 | Savings      | 62000.00 | 2023-03-20 |
+|       1004 |         104 | Savings      | 45000.00 | 2023-04-12 |
++------------+-------------+--------------+----------+------------+
+3 rows in set (0.00 sec)
+
+===================================================
+
+7. Show customers living in **Pune**.
+
+--------------QUERY---------------
+
+SELECT *
+FROM customer
+where address='Pune';
+
+--------------QUERY---------------
+
++-------------+--------------+------------+---------+-----------+
+| customer_id | name         | phone      | address | branch_id |
++-------------+--------------+------------+---------+-----------+
+|         101 | Rahul Sharma | 9876543210 | Pune    |         1 |
+|         102 | Sneha Patil  | 9876501234 | Pune    |         1 |
++-------------+--------------+------------+---------+-----------+
+2 rows in set (0.00 sec)
+
+===================================================
+
+8. Display **loan types** available in the bank.
+
+--------------QUERY---------------
+
+SELECT DISTINCT loan_type
+FROM loan;
+
+--------------QUERY---------------
+
++----------------+
+| loan_type      |
++----------------+
+| Home Loan      |
+| Car Loan       |
+| Education Loan |
+| Personal Loan  |
+| Business Loan  |
++----------------+
+5 rows in set (0.00 sec)
+
+===================================================
+
+9. Show accounts with **balance between 40,000 and 80,000**
+
+--------------QUERY---------------
+
+SELECT *
+FROM account
+WHERE balance BETWEEN 40000 AND 80000;
+
+--------------QUERY---------------
+
++------------+-------------+--------------+----------+------------+
+| account_id | customer_id | account_type | balance  | open_date  |
++------------+-------------+--------------+----------+------------+
+|       1001 |         101 | Savings      | 50000.00 | 2023-01-10 |
+|       1002 |         102 | Current      | 75000.00 | 2023-02-15 |
+|       1003 |         103 | Savings      | 62000.00 | 2023-03-20 |
+|       1004 |         104 | Savings      | 45000.00 | 2023-04-12 |
++------------+-------------+--------------+----------+------------+
+4 rows in set (0.00 sec)
+
+===================================================
+
+10. Display loans with **status = 'Approved'**.
+
+--------------QUERY---------------
+
+SELECT *
+FROM loan
+WHERE status='Approved';
+
+--------------QUERY---------------
+
++---------+-------------+----------------+-----------+----------+
+| loan_id | customer_id | loan_type      | amount    | status   |
++---------+-------------+----------------+-----------+----------+
+|     501 |         101 | Home Loan      | 500000.00 | Approved |
+|     503 |         103 | Education Loan | 200000.00 | Approved |
+|     505 |         105 | Business Loan  | 700000.00 | Approved |
++---------+-------------+----------------+-----------+----------+
+3 rows in set (0.00 sec)
+
+==================================================
+==================================================
+END OF THE ASSIGNMENT 1 || DATE - 05/09
+PRN - 260840120214 || NAME - UTSAV JAISWAL
+PRN - 260840120201 || NAME - SUMIT SUROSHE
+
