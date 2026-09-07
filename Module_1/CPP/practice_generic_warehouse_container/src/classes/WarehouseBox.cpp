@@ -65,7 +65,7 @@ ostream& operator<<(ostream& out, const WarehouseBox<T>& w){
         << "item : " << w.item << " || " << "quantity : " << w.quantity << endl;
     return out;
 }
-
+// ! Required this 
 template ostream &operator<< <string>(ostream &, const WarehouseBox<string> &);
 
 template <typename T>
