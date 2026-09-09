@@ -27,7 +27,6 @@ void PremiumTicket::display(){
     cout << "=========================================" << endl;
 }
 
-
 void PremiumTicket::serialize(ostream &os) const {
     RegularTicket::serialize(os);
 
@@ -44,9 +43,9 @@ void PremiumTicket::deserialize(istream &is) {
 
     type = BookingType::Premium;
 
-    int bookingId;
-    is.read(reinterpret_cast<char *>(&bookingId), sizeof(bookingId));
-    this->setBookingId(bookingId);
+    // int bookingId;
+    // is.read(reinterpret_cast<char *>(&bookingId), sizeof(bookingId));
+    // this->setBookingId(bookingId);
 
     is.read(reinterpret_cast<char *>(&len), sizeof(len));
     string movieNm(len, '\0');
