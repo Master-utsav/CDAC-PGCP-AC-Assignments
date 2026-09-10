@@ -1,0 +1,563 @@
+===========================================
+===========================================
+Assignments – Day 4
+===========================================
+===========================================
+Adding constraints on existing tables.
+===========================================
+===========================================
+1. Create new table dept11 having same structure and data as that of dept table.
+
+create table dept11
+as
+(
+	select * from dept
+);
+
+===========================================
+2. Add primary key constraint on deptno. Check the table  structure.
+
+alter table dept11
+add constraint pk_deptno primary key(deptno);
+
+===========================================
+3. Create new table emp110 same as emp and store all employees working in dept 10. 
+
+create table emp110
+as
+(
+	select * 
+	from emp
+	where deptno=10
+    
+);
+
+===========================================
+4. Add primary key constraint on this table for empno. Add foreign key constraint on deptno. Check the table  structure.
+
+alter table emp110
+add 
+constraint pk_empno primary key(empno);
+
+alter table emp110
+add 
+constraint fk_deptno foreign key(deptno) references dept11(deptno);
+
+===========================================
+===========================================
+  Alter Clause
+===========================================
+===========================================
+1. Consider already created employee table with schema is employee (eno ,ename, basic, incentives)
+
+create table employee_copy
+as (select * from employee);
+
+--------------------------------------------
+a) Add column job in the above table. Job is the designation of an employee and it is varchar(12).
+
+alter table employee_copy 
+add column job varchar(12);
+
+--------------------------------------------
+b) Ramesh is promoted as Head Clerk. Assign him new job in the table.
+
+update employee_copy
+set job='Head Clerk'
+where ename='Ramesh';
+
+--------------------------------------------
+c) Sarita and Jitesh are promoted as Analyst. Make necessary changes in the table.
+
+update employee_copy
+set job='Analyst'
+where ename in ('Sarita', 'Jitesh');
+
+--------------------------------------------
+d) Change job to Manager for all employees other than 'Head Clerk' or 'Analyst' 
+
+update employee_copy
+set job='Manager'
+where job is null;
+
+===========================================
+2. Create (If you have this table already use the same one) following vehicle_customer table with following constraints
+
+--------------------------------------------
+a)  vid is a transaction id PK aoto_increment
+
+// duplicate was there for id = 1
+delete from vehicle_table
+where vid = 1
+limit 1;
+
+// first we have to make that as autoincrement 
+alter table vehicle_table
+add constraint pk_vid primary key(vid);
+
+// then only we can do auto_increment
+alter table vehicle_table
+modify vid int auto_increment; 
+
+--------------------------------------------
+b)  all other entries in the table are not null.
+
+alter table vehicle_table
+modify vname varchar(20) not null; 
+
+alter table vehicle_table
+modify price int not null; 
+
+alter table vehicle_table
+modify discount int not null;
+
+alter table vehicle_table
+modify milage int not null;
+
+alter table vehicle_table
+modify category varchar(20) not null;
+
+alter table vehicle_table
+modify details varchar(100) not null; 
+
+--------------------------------------------
+c)  buy_price is greater than 0.
+
+alter table vehicle_table
+modify price int check(price>0); 
+
+===========================================
+create table vehicle_cust_table
+(
+	tid int auto_increment,
+	custid int not null,
+	vid int not null,
+	sid int not null,
+	buy_price int check(buy_price>0),
+	constraint pk_tid primary key(tid)
+);
+
+Alter table vehicle_cust_table rename to cust_vehicle;
+
+insert into cust_vehicle
+values
+(1, 1, 1, 10, 75000),
+(2, 1, 2, 10, 790000),
+(3, 2, 3, 11, 80000),
+(4, 3, 3, 11, 75000),
+(5, 3, 2, 10, 800000);
+
+----------------------------------------------------
+1. Add new column by name rating with int data type in cust_vehicle table. Check the table structure. 
+
+alter table cust_vehicle
+add column rating int;
+
+----------------------------------------------------
+2. Change datatype of buy_price column in already created cust_vehicle table to float.
+
+alter table cust_vehicle
+modify column buy_price float(8,2);
+
+===========================================
+===========================================
+SubQuery
+===========================================
+===========================================
+1. Display all employees who earn sal more that Smith earns.
+
+select *
+from emp
+where sal>(select sal from emp where ename='smith');
+
+===========================================
+2. Display all employees who earn sal more that Martin and Ford earn.
+
+select *
+from emp
+where sal >all (select sal from emp where ename in ('Martin', 'Ford'));
+
+===========================================
+3. Display all employees who earn salary < Scott and salary > Adams sal.
+
+select *
+from emp
+where sal < (select sal from emp where ename='Scott') 
+	  and sal > (select sal from emp where ename='Adams');
+
+===========================================
+4. Display all employees with salary > either Ward's  salary or Blake's sal.
+
+select *
+from emp
+where sal >any (select sal from emp where ename in ('Ward', 'Blake'));
+
+===========================================
+5. Display all employees who earn more than average sal of dept 10.
+
+select *
+from emp
+where sal > (select avg(sal) from emp where deptno=10);
+
+===========================================
+6. Display all employees who are working in sales department.(consider dept table and emp table)
+
+select *
+from emp
+where deptno in 
+(select d.deptno from emp e, dept d where d.dname='sales' 
+&& d.deptno = e.deptno);
+
+===========================================
+7. Display deptno, sum of salary  and min(sal) for all employees who are managers.
+
+select deptno, sum(sal), min(sal)
+from emp
+where job='manager'
+group by deptno;
+
+===========================================
+8. Display all employees working in the dept whose location is Chicago and are salesman.
+
+select *
+from emp
+where job='salesman' and
+deptno=(select deptno from dept where loc='chicago');
+
+===========================================
+9. List all employees getting sal less than the salary of an employee whose empno is 7689.
+
+select *
+from emp
+where sal < (select sal from emp where empno=7689);
+
+// empty it should be 7698
+
+select *
+from emp
+where sal < (select sal from emp where empno=7698);
+
+===========================================
+10. Write a query to display all employees reporting to mgr 7689 or 7839.
+
+select *
+from emp
+where mgr in (7689, 7839); // 7689 not exist
+
+===========================================
+11. Show the information for all employees that are in the same department as JONES, but do not show JONES.
+
+select *
+from emp
+where ename!='jones' and deptno = (select deptno from emp where ename='jones');
+
+===========================================
+11. Show the information for all employees that are in the same department as JONES, but do not show JONES.
+
+create table emp_new_table
+as (
+	select * from emp
+);
+
+update emp_new_table
+set sal=(select sal from 
+		(select sal 
+		from emp_new_table 
+		where ename='king') temp
+	 )
+where ename='ford';
+
+======================================
+======================================
+Correlated Subquery 
+======================================
+======================================
+1. Write a query to display all employees earning salary more than the average salary of the department in which they work.
+
+select *
+from emp e1
+where e1.sal > (select avg(sal) 
+		from emp e2
+		where e2.deptno = e1.deptno);
+
+======================================
+2. Find the highest-paid employee in each department
+
+select *
+from emp e1
+where e1.sal >= (select max(sal) 
+		from emp e2
+		where e2.deptno = e1.deptno);
+
+======================================
+3. Find employees who earn more than at least one employee in their department
+
+select e1.ename, e1.deptno, e1.sal
+from emp e1
+where e1.sal > any (select e2.sal 
+		from emp e2
+		where e2.deptno = e1.deptno);
+
+=======================================
+=======================================
+Solve below queries
+=====================================
+=====================================
+create table category_dummy(
+       cid int primary key,
+       cname varchar (15) unique not null,
+       description varchar (30)     
+);
+
+insert into category_dummy
+values 
+(1, 'chips', 'very crunchy'), 
+(2, 'chocolate', 'very chocolaty'), 
+(3, 'snacks', 'yummy'), 
+(4, 'cold drinks', 'Thanda Thanda cool cool');
+
+
+create table salesman_dummy
+(
+   sid int primary key,
+   sname varchar (15) unique not null,
+   city varchar (15)
+);
+
+
+insert into salesman_dummy
+values 
+(11, 'rahul', 'Pune'), 
+(12, 'kriti', 'mumbai'), 
+(13, 'prasad', 'nashik'), 
+(14, 'arnav', 'amravati');
+
+
+create table product_dummy(
+   pid  int primary key,
+   pname varchar (20),
+   price float (6,2) default 20.00,
+   qty int check(qty>0),
+   cid int,
+   sid int,
+   constraint fk_cdid foreign key(cid) references category_dummy(cid) on delete set null,
+   constraint fk_sdid foreign key(sid) references salesman_dummy(sid)  
+   );
+
+insert into product_dummy
+values 
+(123, 'lays', 30, 30, 1, 12), 
+(111, 'pepsi', 40, 50, 4, 11), 
+(134, 'nachos', 50, 50, 1, 12), 
+(124, 'dairy milk', 40, 60, 2, 14), 
+(125, 'pringles', 40, 60, 1, 14), 
+(213, 'sketch pens', 56, 150, NULL, 11), 
+(167, 'eraser', 90, 5, NULL, NULL);
+
+-----------------------------------------------------------
+1. List all pid, pname ,cid, cname  with category chips
+
+select p.pid, p.pname, c.cid, c.cname
+from product_dummy p, category_dummy c
+where c.cid = p.cid;
+
+-----------------------------------------------------------
+2. Display all products sold by kirti
+
+select p.pid, p.pname
+from product_dummy p, salesman_dummy s
+where s.sid = p.sid and s.sname='kriti';
+
+-----------------------------------------------------------
+3. List all salesmen who stays in city where name starts with P or N
+
+select sname, city
+from salesman_dummy
+where regexp_like(city, '^[PN]');
+
+-----------------------------------------------------------
+4. Add new column in salesman table by name credit limit.
+
+alter table salesman_dummy
+add column credit_limit int;
+
+=======================================
+=======================================
+Mix Queries
+=====================================
+=====================================
+
+CREATE TABLE Customers_sub (
+  customer_id INT PRIMARY KEY,
+  name VARCHAR(50),
+  city VARCHAR(50)
+);
+
+INSERT INTO Customers_sub VALUES
+(1, 'Amit Sharma', 'Pune'),
+(2, 'Neha Verma', 'Mumbai'),
+(3, 'Rahul Singh', 'Delhi'),
+(4, 'Priya Patel', 'Ahmedabad'),
+(5, 'Karan Mehta', 'Bangalore'),
+(6, 'Sneha Joshi', 'Pune'),
+(7, 'Arjun Reddy', 'Hyderabad');
+
+CREATE TABLE Orders_sub (
+  order_id INT PRIMARY KEY,
+  customer_id INT,
+  amount DECIMAL(10,2),
+  order_date DATE
+);
+
+INSERT INTO Orders_sub VALUES
+(101, 1, 1200.50, '2025-01-10'),
+(102, 2, 500.00, '2025-01-12'),
+(103, 1, 750.00, '2025-01-15'),
+(104, 3, 2000.00, '2025-02-01'),
+(105, 4, 300.00, '2025-02-05'),
+(106, 2, 1800.75, '2025-02-10'),
+(107, 5, 950.00, '2025-02-12'),
+(108, 1, 400.00, '2025-02-15'),
+(109, 6, 2200.00, '2025-03-01'),
+(110, 3, 1300.00, '2025-03-05'),
+(111, 7, 700.00, '2025-03-08'),
+(112, 2, 250.00, '2025-03-10');
+
+==================================================
+1. Display total spendings per customer.
+
+select customer_id, sum(amount) "total_spend"
+from orders_sub
+group by customer_id;
+
+==================================================
+2. Display Top 3 customers as per their spendings
+
+select customer_id, sum(amount) "top 3 spends"
+from orders_sub
+group by customer_id
+order by  sum(amount) desc
+limit 3;
+
+==================================================
+3. Generate Monthly sales report
+
+select month(order_date), sum(amount) "monthly spend"
+from orders_sub
+group by month(order_date)
+order by  sum(amount) desc;
+
+==================================================
+4. Display customer_id, name and city of customers who ordered 
+ more than 3 times
+
+select c.customer_id, c.name , c.city
+from customers_sub c
+where customer_id in (
+			select o.customer_id 
+			from orders_sub o
+			group by o.customer_id 
+			having count(*) >= 3
+		     );
+
+==================================================
+5. Find customers who spent more than ₹2000 as a total amount.
+
+select c.customer_id, c.name , c.city
+from customers_sub c
+where customer_id in (
+			select o.customer_id 
+			from orders_sub o
+			group by o.customer_id 
+			having sum(amount) > 2000
+		     );
+
+==================================================
+6. Count the number of orders placed by each customer
+
+select customer_id, count(*) "total orders"
+from orders_sub
+group by customer_id;
+
+==================================================
+7. Count the number of orders placed by each customer
+
+select max(amount) "max orders"
+from orders_sub;
+
+==================================================
+8. List customers who placed orders in February
+
+select c.* , month(order_date)
+from orders_sub o, customers_sub c
+where month(order_date)=2 and c.customer_id = o.customer_id;
+
+==================================================
+9. Count the number of orders placed by each customer
+
+select *
+from orders_sub
+order by amount desc
+limit 1,1;
+
+==================================================
+10. Identify the customer with the highest total spending
+
+select customer_id , sum(amount) "total spend"
+from orders_sub
+group by customer_id
+order by sum(amount) desc
+limit 1;
+
+==================================================
+11. Rank customers based on their total spending
+
+select customer_id , sum(amount) "total spend",
+case
+	when sum(amount) > 3000 then "excellent"
+	when sum(amount) < 2000 and sum(amount) > 2500 then "good"
+	when sum(amount) > 1000 then "avg"
+	else "improvement needed"
+end "rank"
+from orders_sub
+group by customer_id
+order by sum(amount) desc;
+
+==================================================
+12. Identify duplicate order amounts
+
+select amount, count(*)
+from orders_sub
+group by amount
+having count(*) >= 2;
+
+==================================================
+13. Find orders with amount greater than the average order amount
+
+select *
+from orders_sub
+where amount > (select avg(amount) from orders_sub);
+
+==================================================
+14. Get the latest order for each customer
+
+select customer_id, max(order_date)
+from orders_sub
+group by customer_id;
+
+==================================================
+15. Find customers who placed more than 2 orders
+
+select customer_id, count(*) "more than 2 orders"
+from orders_sub
+group by customer_id
+having count(*) > 2;
+
+==================================================
+==================================================
+END of assignment 
+==================================================
+==================================================
+
+
+

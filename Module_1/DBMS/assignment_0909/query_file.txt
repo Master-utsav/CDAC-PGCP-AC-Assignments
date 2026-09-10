@@ -1,0 +1,509 @@
+========================================
+========================================
+GROUPING DATA TOEGTHER
+========================================
+========================================
+
+1. Find how much salary amount is invested in the employees working as a salesman of the company.
+
+select job, sum(sal)
+from emp
+where job='salesman';
+
+========================================
+
+2. Find minimum and maximum salary earned by any employee working as a clerk in the company.
+
+select job, min(sal), max(sal)
+from emp
+where job='clerk';
+
+========================================
+
+3. Find how many employees were hired in the year 1980.
+
+select hiredate, count(*)
+from emp
+where year(hiredate)='1980'
+group by hiredate;
+
+========================================
+
+4. Display sum of salary and minimum salary for all employees who are managers.
+
+select sum(sal), min(sal)
+from emp
+where job='manager';
+
+========================================
+
+5. Find total salary for each dept where there is more than 1 employee working as a clerk .  Use emp table.  
+
+select deptno, count(*)
+from emp
+where job='clerk'
+group by deptno
+having count(*)>1;
+
+========================================
+
+6. Calculate how many employees earn sal more than 1500 in each dept. Arrange the data according to the deptno in ascending order.
+
+select deptno, count(*)
+from emp
+where sal >= 1500
+group by deptno
+order by deptno;
+
+========================================
+
+7. Display number of clerks  in each department.
+
+select deptno, count(*)
+from emp
+where job='clerk'
+group by deptno;
+
+========================================
+
+8. List minimum salary for each department.
+
+select deptno, min(sal)
+from emp
+group by deptno;
+
+========================================
+
+9. Calculate total amount invested by company in the salary of employees for each and every department. List deptno and total of salaries if total is more than 10000.
+
+--------first--------
+select deptno, sum(sal)
+from emp
+group by deptno;
+
+--------second---------
+select deptno, sum(sal)
+from emp
+group by deptno
+having sum(sal) > 10000;
+
+========================================
+
+10. Display job wise sum of salary if sum salary >5000 for all departments. Excluding dept 30. 
+
+select job, sum(sal)
+from emp
+where deptno != 30
+group by job
+having sum(sal)>5000;
+
+========================================
+
+11. Display max sal for manager  
+
+select max(sal) , job
+from emp
+where job = 'manager';
+
+========================================
+
+12. List all   jobs and average salary of that job and the   number of   employees in that job.
+
+select job, avg(sal), count(*) "no of emp"
+from emp
+group by job;
+
+========================================
+
+13. Display the department number and the employee count having at least 4 employees working for it.
+
+select deptno, count(*) "emp count"
+from emp
+group by deptno
+having count(*) >= 4;
+
+========================================
+
+14. Display the count of employees getting commission.
+
+select count(*) "count of emp have comm"
+from emp
+where comm is not null;
+
+========================================
+
+15. Find minimum salary in emp table for emps hired in year 1981.
+
+select  min(sal)
+from emp
+where year(hiredate)='1981';
+
+========================================
+
+16. Find avg salary earned by employees who have been working for an organization for more than 44 years.,
+
+select count(*) as "more than 44 years exp"
+from emp
+where floor(datediff(curdate(), hiredate)/365) > 44;
+
+========================================
+
+17. Find number of managers in the organization earning even salary.
+
+select count(*) as "earning even salary manager count"
+from emp
+where job = 'manager' and mod(sal, 2)= 0 ;
+
+========================================
+
+18. Display count of employees joined each year in the organization.
+
+select date_format(hiredate, '%Y'), count(*) 
+from emp
+group by date_format(hiredate, '%Y');
+
+========================================
+
+19. Find duplicate salary entry in the table.
+
+select sal "duplicate sal" , count(*) 
+from emp
+group by sal
+having count(*) >= 2;
+
+========================================
+
+20. Count number of employees working in dept 30 as a manager.
+
+select deptno , job , count(*) "no of emp"
+from emp
+where job = 'manager' && deptno = 30;
+
+========================================
+
+21. Count number of employees earning sal more than 1300 for each dept
+
+select deptno , count(*) "no of emp having sal > 1300"
+from emp
+where sal > 1300
+group by deptno;
+
+========================================
+========================================
+Create following tables for given schema. 
+Apply constraints as mentioned in the schema.
+========================================
+========================================
+
+---------- parent table--------
+create table
+modules
+(
+cid varchar(10), 
+cname varchar(50) unique not null, 
+fees int default 5000,
+constraint pk_cid primary key(cid)
+);
+
+---------- dependent table-------------
+create table
+faculty
+(
+tid varchar(10), 
+tname varchar(50) not null,
+cid varchar(10), 
+salary int default 20000,
+experience int check(experience>=10),
+constraint pk_tid primary key(tid),
+constraint fk_cid foreign key(cid) references modules(cid)
+);
+
+insert into modules 
+values 
+('c1', 'Core Java', 7000),
+('c2', 'Linux', 8000),
+('c3', 'Data Structure', 10000),
+('c4', 'Python', 12000),
+('c5', 'Dot Net', NULL),
+('c6', 'Big Data', 20000);  
+ 
+insert into faculty
+values
+('t1', 'Amit',   'c2', 45000, 13),
+('t2', 'Rajan',  'c1', 52000, 15),
+('t3', 'Shruti', 'c2', 38000, 12),
+('t4', 'Arti',   'c2', 61000, 17),
+('t5', 'Sameer', 'c3', 47000, 14),
+('t6', 'Sanjay', NULL, 33000, 11),
+('t7', 'Soha',   NULL, 29000, 11);   
+
+========================================
+
+1. update cid of Dot Net to c8
+
+update modules
+set cid = 'c8'
+where cname='Dot Net';
+
+Rows matched: 1  Changed: 1  Warnings: 0
+
+========================================
+
+2. update cid of Sanjay to c2 and cid of Soha to c15
+
+update faculty
+set cid = 'c2'
+where tname='Sanjay';
+
+Rows matched: 1  Changed: 1  Warnings: 0
+
+update faculty
+set cid = 'c15'
+where tname='soha';
+
+ERROR
+ Cannot add or update a child row: a foreign key constraint fails (`batch2`.`faculty`, CONSTRAINT `fk_cid` FOREIGN KEY (`cid`) REFERENCES `modules` (`cid`))
+
+========================================
+
+3. insert in faculty(t8,'Miller', c17,20000);
+
+insert into faculty
+values ('t8','Miller', 'c17',20000); // expreince is missing 
+
+insert into faculty (tid, tname, cid, salary)
+values ('t8','Miller', 'c17',20000);
+
+Cannot add or update a child row: a foreign key constraint fails (`batch2`.`faculty`, CONSTRAINT `fk_cid` FOREIGN KEY (`cid`) REFERENCES `modules` (`cid`))
+
+========================================
+
+4. Delete Big Data entry from module table 
+
+delete from modules
+where cname='Big Data';
+
+Query OK, 1 row affected (0.01 sec)
+
+========================================
+
+5. Delete Linux entry from module table 
+
+delete from modules
+where cname='Linux';
+
+Cannot delete or update a parent row: a foreign key constraint fails (`batch2`.`faculty`, CONSTRAINT `fk_cid` FOREIGN KEY (`cid`) REFERENCES `modules` (`cid`))
+
+========================================
+
+6. Drop table module
+
+drop table modules; 
+
+Cannot drop table 'modules' referenced by a foreign key constraint 'fk_cid' on table 'faculty'.
+
+=========================================
+========================================
+Create following tables with proper constraints
+book(bid, bname, lid ,aid)
+bid-PK use auto_increment
+lid-FK on delete set null
+aid-FK on delete set null
+author(aid, aname)
+aid-PK use auto_increment
+language(lid, lname)
+lid-PK use auto_increment ​​​​​​​
+=========================================
+========================================
+
+create table author_table
+(
+aid int auto_increment,
+aname varchar(50) not null,
+constraint pk_aid primary key(aid)
+);
+
+create table lang_table
+(
+lid int auto_increment,
+lname varchar(50) not null,
+constraint pk_lid primary key(lid)
+);
+
+create table book_table
+(
+bid int auto_increment,
+bname varchar(50) not null,
+lid int,
+aid int,
+constraint pk_bid primary key(bid),
+constraint fk_lid foreign key(lid) references lang_table(lid),
+constraint fk_aid foreign key(aid) references author_table(aid)
+);
+
+insert into author_table (aname)
+values ('J.K.Rowling'), ('Munshi Premchand'), ('Mario Puzo'), ('Ranjeet Desai');
+
+insert into lang_table (lname)
+values ('Marathi'), ('English'), ('Hindi');
+
+insert into book_table (bname, lid, aid)
+values ('Godan', 3, 2), ('Shriman Yogi', 1, 4), ('Harry Potter and the goblet of fire', 2, 1), ('The Godfather', 2, 3);
+
+===========================================
+
+1. Delete language 'Marathi' from language table and see the changes in language as well book table
+
+delete from lang_table
+where lname='Marathi';
+
+Cannot delete or update a parent row: a foreign key constraint fails (`batch2`.`book_table`, CONSTRAINT `fk_lid` FOREIGN KEY (`lid`) REFERENCES `lang_table` (`lid`))
+
+===========================================
+
+2. Delete author 'J.K.Rawling'  from author table and see the changes in author table as well book  table.
+
+delete from author_table
+where aname='J.K.Rowling';
+
+Cannot delete or update a parent row: a foreign key constraint fails (`batch2`.`book_table`, CONSTRAINT `fk_aid` FOREIGN KEY (`aid`) REFERENCES `author_table` (`aid`))
+
+===========================================
+
+3. Drop tables 
+
+drop table author_table;
+
+Cannot drop table 'author_table' referenced by a foreign key constraint 'fk_aid' on table 'book_table'.
+
+drop table lang_table;
+
+Cannot drop table 'lang_table' referenced by a foreign key constraint 'fk_lid' on table 'book_table'.
+
+drop table book_table; // it got deleted 
+
+Query OK, 0 rows affected (0.04 sec)
+
+===========================================
+===========================================
+Use Banking database to solve below queries
+===========================================
+===========================================
+
+1. Find **total number of customers**.
+
+select count(*)
+from customer;
+
+===========================================
+
+2. Count **total number of transactions**.
+
+select count(*)
+from transactions;
+
+===========================================
+
+3. Count number of **accounts by account type**. Display Account type and its count.
+
+select account_type, count(*)
+from account
+group by account_type;
+
+===========================================
+
+4. Show **total loan amount**.
+
+select sum(amount)
+from loan;
+
+===========================================
+
+5. Find **number of customers in each branch**.
+
+select branch_id, count(*)
+from customer
+group by branch_id;
+
+===========================================
+
+6. Show **total transaction amount per account* 
+
+select sum(amount)
+from transactions;
+
+===========================================
+
+7. Show **total transaction amount per account* 
+
+select count(*)
+from account;
+
+===========================================
+
+8. Display **customer name and account balance**.
+
+select c.name, a.balance
+from customer c, account a
+where c.customer_id = a.customer_id;
+
+===========================================
+
+9. Show **customer name, branch name**.
+
+select c.name, b.branch_name
+from customer c, branch b
+where b.branch_id = c.branch_id;
+
+
+===========================================
+
+10. Display **customer name and loan amount**.
+
+select c.name, l.amount
+from customer c, loan l
+where l.customer_id = c.customer_id;
+
+===========================================
+
+11. Show **account details with customer phone number**.
+
+select a.*, c.phone
+from customer c, account a
+where a.customer_id = c.customer_id;
+
+===========================================
+
+12. Display **transaction details with customer name**.
+
+select t.*, c.name
+from customer c, account a, transactions t
+where a.customer_id = c.customer_id and t.account_id = a.account_id;
+
+===============================================
+===============================================
+===============================================
+===============================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
