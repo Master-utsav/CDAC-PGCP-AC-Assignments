@@ -1,0 +1,374 @@
+=====================================
+=====================================
+Assignment Day 7
+======================================
+======================================
+Common Table Expressions::
+======================================
+======================================
+Write CTE having recursive function which display first 15 even numbers.
+
+with recursive even_num as (
+   select 2 as n
+   union 
+   select n+2
+   from even_num
+   where n < 30
+)
+select n from even_num;
+
+======================================
+2. Write a query to find the average salary for each department and then list the names of employees who earn more than the avg sal of their respective departments.
+
+with avg_sal as (
+   select deptno, avg(sal) avg_s
+   from emp 
+   group by deptno
+)
+select * 
+from emp e, avg_sal av 
+where e.sal > av.avg_s and e.deptno = av.deptno;
+
+======================================
+3. Write a query to display empno, ename, deptno and sum(sal)  using CTE.
+
+with sum_sal as (
+   select sum(sal) as sum_s
+   from emp
+)
+select e.empno, e.ename, e.deptno, s.sum_s
+from emp e, sum_sal s;
+
+======================================
+4. Write a query to display top 2 departments having avg salay. Display deptno, dname and avg sal.
+
+with avg_sal_dept as (
+   select deptno, avg(sal) avg_s
+   from emp
+   group by deptno
+)
+select d.deptno, d.dname, av.avg_s
+from dept d, avg_sal_dept av
+where d.deptno = av.deptno
+order by av.avg_s desc
+limit 2;
+
+======================================
+======================================
+Cursors::
+======================================
+======================================
+Write a cursor to increment salary of all employees by 5% if employee has joined in year 1981.
+
+delimiter // 
+drop procedure if exists update_inc_sal;
+create procedure update_inc_sal()
+begin
+     declare s decimal(7,2);
+     declare eno int;
+     declare y date;
+     declare f int default 0;
+     declare cur cursor 
+	for (select empno, sal, hiredate
+	     from emp_copy);
+     declare continue handler for not found
+	set f = 1;
+
+     open cur;
+
+     it:loop
+	  if f = 1
+	      then leave it;
+	  end if;
+	  fetch cur into eno, s, y;
+    
+          if year(y)='1981'
+          then 
+	       update emp_copy 
+               set sal = s+(s*0.05) 
+	       where empno = eno;
+	  end if;
+     end loop;
+
+     close cur;
+
+end //
+delimiter ; 
+
+call update_inc_sal();
+
+select * from emp_copy;
+
+======================================
+2. Write a cursor which will handle all rows having deptno 20.
+
+delimiter //
+drop procedure if exists display_row_deptno;
+create procedure display_row_deptno()
+begin
+     declare n int;
+     declare f int default 0;
+     declare cur cursor
+	for select deptno from emp_copy where deptno=20;
+     open cur;
+	  fetch cur into n;
+          select * from emp_copy where deptno=n;
+     close cur;
+end //
+delimiter ;
+
+call display_row_deptno();
+
+select * from emp_copy;
+
+======================================
+3. Write a cursor to increment salary as follows
+     Clerk 10 % rise
+     Manager 5% rise
+     Analyst 7% rise.
+     No rise given for other jobs.
+
+delimiter //
+drop procedure if exists update_inc_sal;
+create procedure update_inc_sal()
+begin
+     declare eno int;
+     declare s decimal(7,2);
+     declare j varchar(15);
+     declare f int default 0;
+     declare cur cursor 
+ 	for select empno, sal, job from emp_copy;
+     declare continue handler for not found 
+	set f = 1;
+  
+     open cur;
+     it:loop
+        fetch cur into eno, s, j;
+	if f = 1
+	   then leave it;
+        elseif j='clerk'
+	then update emp_copy
+	     set sal = s + (s * 0.1)
+	     where empno=eno;
+	elseif j='manager'
+	then update emp_copy
+	     set sal = s + (s * 0.05)
+	     where empno=eno;
+	elseif j='analyst'
+	then update emp_copy
+	     set sal = s + (s * 0.07)
+	     where empno=eno;
+        end if;
+     end loop;
+     close cur;
+     select * from emp_copy;
+end //
+
+delimiter ;
+
+call update_inc_sal();
+
+======================================
+4. Write a cursor to increment salary as follows
+     Clerk 10 % rise
+     Manager 5% rise
+     Analyst 7% rise.
+     No rise given for other jobs.
+
+delimiter //
+drop procedure if exists display_emp_per_job;
+create procedure display_emp_per_job(in j varchar(15))
+begin
+     declare f int default 0;
+     declare jc varchar(15);
+     declare cur cursor
+ 	for select job from emp_copy;
+     declare continue handler for not found
+	set f = 1;
+ 
+     open cur;
+     it:loop
+        fetch cur into jc;
+	if f = 1
+	   then leave it;
+        elseif jc=j
+	then select * from emp_copy where job = jc;
+        end if;
+     end loop;
+     close cur;
+end //
+
+delimiter ;
+
+set @j = 'manager';
+call display_emp_per_job(@j);
+
+======================================
+======================================
+Triggers::
+======================================
+======================================
+Consider following tables
+product(pid, pname, price, qty) 
+product_details(pid,amt)
+amt = product.price * qty
+Write a trigger which will calculate amt every time any update is done in the price of an item.  Hint : after update trigger
+
+create table product_details(pid int auto_increment, amt decimal(7,2), constraint pk_pid primary key(pid));
+
+// first trigger for inserting the data in products details
+
+delimiter //
+drop trigger if exists insert_product_price_tr;
+create trigger insert_product_price_tr
+before insert
+on products
+for each row
+begin
+    insert into product_details (amt)
+    values(new.price * new.qty);
+end //
+delimiter ;
+
+insert into products 
+values(121,'chips', 45, 12);
+
+// trigger for update the data in products details
+
+create table product_upd_logs(pid int auto_increment, old_price decimal(7,2), new_price decimal(7,2), change_date date, constraint pk_pid primary key(pid));
+
+delimiter //
+drop trigger if exists update_product_price_tr;
+create trigger update_product_price_tr
+after update
+on products
+for each row
+begin
+    if new.price != old.price
+    then insert into product_upd_logs(old_price, new_price, change_date)
+		values(old.price, new.price, curdate());
+    end if;
+       
+end //
+delimiter ;
+
+update products
+set price = 50
+where pid = 121;
+
+select * from product_upd_logs;
+
+======================================
+2. Consider following table
+   emp_wage(eno, ename, sal, over_time)
+   eno : pk auto_inc
+Write a trigger which will insert over_time as 400 if value of over_time entered is null.
+Hint : before insert trigger
+
+create table emp_wage(eno int auto_increment, ename varchar(15), sal decimal(7,2), over_time decimal(7,2), constraint pk_eno primary key(eno));
+
+// first trigger for inserting the data in products details
+
+delimiter //
+drop trigger if exists insert_emp_tr;
+create trigger insert_emp_tr
+before insert
+on emp_wage
+for each row
+begin
+    if new.over_time is null or new.over_time < 400
+	then set new.over_time = 400;
+    end if;
+end //
+delimiter ;
+
+insert into emp_wage (ename, sal, over_time)
+values ('utsav', 40000, 200),
+       ('hamza', 80000, NULL),
+       ('jin', 20000, 500);
+
+select * from emp_wage;
+
+======================================
+3. Consider following table
+      order_master(oid, pname, qty, price)
+      oid : pk auto_inc
+      order_log(oid ,odate, amt)
+Write a trigger which will create a log of all orders once order is placed. Hint : after insert trigger
+
+create table order_master(oid int auto_increment, pname varchar(15), qty int, price decimal(7,2), constraint pk_eno primary key(oid));
+
+create table order_log(oid int, odate date, amt decimal(7,2));
+
+// trigger after inserting the data as order 
+
+delimiter //
+drop trigger if exists update_order_log;
+create trigger update_order_log
+after insert
+on order_master
+for each row
+begin
+    insert into order_log(oid, odate, amt)
+    values (new.oid, curdate(), (new.price * new.qty));
+end //
+delimiter ;
+
+insert into order_master(pname, qty, price)
+values ('chips', 40, 20),
+       ('ladoo', 8, 100),
+       ('barfi', 20, 250);
+
+select * from order_master;
+select * from order_log;
+
+======================================
+4. Create a table emp_data(eno PK auto_inc, ename,job,sal)
+   Add following data
+        ('Akshay','Developer',30000)
+        ('Anika','Analyst',50000)
+        ('Radhika''Manager',65000)
+Write a trigger to keep log of the data if any updation is done in the salary.
+Keep data in emp_log(eno, ename, job, osal, nsal)
+where osal : is previous salary
+      nsal : is updated salary
+
+create table emp_data_2(eno int auto_increment, ename varchar(15), job varchar(15), sal decimal(7,2), constraint pk_eno primary key(eno));
+
+create table emp_log(eno int, ename varchar(15), job varchar(15), osal decimal(7,2), nsal decimal(7,2));
+
+// trigger after update if data is modify
+
+delimiter //
+drop trigger if exists update_emp_data_2_log;
+create trigger update_emp_data_2_log
+after update
+on emp_data_2
+for each row
+begin
+    if old.sal != new.sal
+    then insert into emp_log(eno, ename, job, osal, nsal)
+   	 values (old.eno, old.ename, old.job, old.sal, new.sal);
+    end if;
+end //
+delimiter ;
+
+insert into emp_data_2(ename, job, sal)
+values ('Akshay','Developer',30000),
+        ('Anika','Analyst',50000),
+        ('Radhika','Manager',65000);
+
+select * from emp_data_2;
+
+update emp_data_2 set sal = 20000 where ename='akshay';
+select * from emp_log;
+
+
+=======================================
+=======================================
+END OF ASSIGNMENT
+=======================================
+===========================================
+
+
+

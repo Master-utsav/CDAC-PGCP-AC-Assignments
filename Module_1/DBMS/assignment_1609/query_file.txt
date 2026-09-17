@@ -1,0 +1,239 @@
+==================================
+==================================
+ASSIGNMENT - 8 (1)
+==================================
+===================================
+Solve following assignments. Use movie collection
+=======================================
+=======================================
+1. display all movies with rating=4
+
+db.new_movie.find({rating:4})
+
+=======================================
+2. display all movies with rating=3 and price=200
+
+db.new_movie.find({rating:3, price:200})
+   
+=======================================
+3. display all movies with rating>3 and price=540
+
+db.new_movie.find({rating:{$gt:3}, price:540})
+ 
+=======================================
+4. display all movies with rating>3 and price>300
+db.new_movie.find({rating:{$gt:3}, price:{$gt:300}})
+
+=======================================
+5. display all movies with price > 200 and < 400
+db.new_movie.find({price:{$gt:200}, price:{$lt:400}})
+
+=======================================
+6. display all movies with price is 200 or 540 or 400
+
+db.new_movie.find({$or:[{price:200},{price:540},{price:400}]})
+
+=======================================
+7. display all movies with price not equal to  200 nor 540  nor 400
+
+db.new_movie.find({$nor:[{price:200},{price:540},{price:400}]})
+
+=======================================
+8. display all movies with rating=4 or price>300
+
+db.new_movie.find({$or:[{rating:4},{price:{$gt:300}}]})
+
+=======================================
+9. display all movies with price not > 200 and < 400
+
+db.new_movie.find({$nor:[{price:{$gt:200}}, {price:{$lt:400}}]})
+
+=======================================
+10. display all movies with rating is odd
+
+db.new_movie.find({rating:{$mod:[2,1]}});
+
+=======================================
+=======================================
+Add 6 documents where actor is Amitabh 
+and solve the following queries.
+=======================================
+=======================================
+1. display all movies in which amitabh has acted
+db.movie.find({actor:'Amitabh'})
+=======================================
+2. display all movies in which amitabh has acted display in ascending order of price.
+
+db.movie.find({actor:'Amitabh'}).sort({price:1})
+
+=======================================
+3. display all movies in which amitabh has acted display in descending order of price
+
+db.movie.find({actor:'Amitabh'}).sort({price:-1})
+
+=======================================
+4. display all movies in which amitabh has acted display only 1st document
+
+db.movie.find({actor:'Amitabh'}).limit(1)
+
+=======================================
+5. display all movies in which amitabh has acted display only 1st  3 documents
+
+db.movie.find({actor:'Amitabh'}).limit(3)
+
+=======================================
+6. display all movies in which amitabh has acted display only 5th, 6th and 7th.
+
+db.movie.find({actor:'Amitabh'}).skip(4).limit(3)
+
+=======================================
+7. display all movies with number of actors=3
+
+db.movie.find({actor:{$size:3}})
+
+=======================================
+8. Display top 5 highest rating movies. Display  lowest 3 rating movies.
+
+db.movie.find({}).sort({rating:-1}).limit(5)
+
+db.movie.find({}).sort({rating:1}).limit(3)
+
+=======================================
+9. For movie "kahani 2" change rating to 5.
+
+db.movie.updateOne({name: 'kahani 2'}, {$set: {rating: 5}})
+
+=======================================
+10. Change price =400 and increase rating by 2 for all movies with name Kahani in it.
+
+db.movie.updateMany({name:{ $regex: "^kahani.*" }}, {$set: {price: 400, rating: 2}})
+
+=======================================
+11. Decrease price of all movies by Rs. 40.
+
+db.movie.updateMany({}, {$inc:{price:-40}})
+
+=======================================
+12. Increase the price by 10% of price.
+
+db.movie.updateMany({}, {$mul:{price:1.1}})
+
+=======================================
+=======================================
+ Insert 6 documents in emp collection having eno,ename,sal,comm,desg in the field  list. desg is designation of employee.
+db.emp.insertMany([
+    { eno: 101, ename: "Ajit",   sal: 20000, desg: "Manager" },
+    { eno: 102, ename: "Sagar",  sal: 15000, comm: 0, desg: "Analyst" },
+    { eno: 103, ename: "Sakshi", sal: 35000, desg: "Programmer" },
+    { eno: 104, ename: "Rupali", sal: 29000, desg: "Manager" },
+    { eno: 105, ename: "Maya",   sal: 32000, comm: 1000, desg: "Accountant" },
+    { eno: 106, ename: "Amol",   sal: 38000, comm: 700, desg: "Analyst" }
+])   
+========================================
+===============================================
+1. Update salary of all employees by giving an increment of Rs. 4000.
+
+db.emp.updateMany({}, {$inc:{sal:4000}})
+
+===============================================
+ 2 .Update designation of an employee named “Ajit ” from manager to director.
+
+db.emp.updateOne({ename:'Ajit'}, {$set: {desg:'Director'}})
+
+===============================================
+3. Update designation of an employee having Employee Id as “101”
+ 
+db.emp.updateOne({eno:101}, {$set: {desg:'President'}})
+
+===============================================
+4. Count analysts in the collection.
+
+db.emp.countDocuments()
+
+===============================================
+5. display all documents in ascending order of sal
+
+db.emp.find().sort({sal:1})
+
+===============================================
+6.  display name and salary of employee earning max sal
+
+db.emp.find().sort({sal:-1}).limit(1)
+
+
+==================================
+==================================
+ASSIGNMENT - 8 (2)
+==================================
+===================================
+1. Write a query to add primary key constraint on emp table and check clustered index.
+
+alter table emp add constraint pk_empno primary key(empno);
+show index from emp;
+
+===================================
+2. Write a query to create index on deptno. Check created index
+
+create index dep_idx on dept(deptno);
+show index from dept;
+
+===================================
+3. Delete all created indexes.
+
+drop index dep_idx on dept;
+
+===================================
+
+==================================
+==================================
+Extra Assignments
+==================================
+===================================
+1. The HR department wants to know the names of all the employees who were hired after Blake. Create a query to display the name and hire date of any employee hired after employee  Blake.
+
+select ename, hiredate
+from emp
+where hiredate > (select hiredate from emp where ename='Blake');
+
+===================================
+2. Write a query to get  year, and number of employees joined each year.
+select year(hiredate), count(*) as "no_of_emp"
+from emp
+group by year(hiredate);
+===================================
+
+3. Write a query to display all employees with experience more than 43 years.
+select * from emp 
+where floor(datediff(curdate(), hiredate)/365) > 43;
+
+===================================
+4. Display 3rd highest salary.
+
+select * 
+from emp 
+order by sal desc  
+limit 2,1;
+
+===================================
+5. Write a query which will display all employees working in sales department.
+
+select * 
+from emp e
+where e.deptno = (select deptno from dept where dname = 'sales');
+
+===================================
+6. Write a query to display year if more than 2 employees are hired in that year.
+
+select year(hiredate) , count(*)
+from emp
+group by year(hiredate)
+having count(*) > 2;
+
+===================================
+===============================
+
+END of ASSIGNMENT
+
+===========
+=======================================
+
